@@ -1,13 +1,18 @@
 import { FC } from "react";
 import styled from "styled-components";
 
-const StyledH1 = styled.h1`
-  font-size: 1.5rem;
+const StyledH1 = styled.h1<{ centered?: boolean }>`
+  font-size: 2rem;
   margin: 0;
+  text-align: ${(props) => (props.centered ? "center" : "left")};
 `;
 
-const Title: FC = ({ children }) => {
-  return <StyledH1>{children}</StyledH1>;
+interface Props {
+  centered?: boolean;
+}
+
+const Title: FC<Props> = ({ children, centered }) => {
+  return <StyledH1 centered={centered}>{children}</StyledH1>;
 };
 
 export default Title;

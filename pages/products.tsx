@@ -11,7 +11,7 @@ const Products: NextPage = () => {
         <title>Lista de Productos</title>
       </Head>
 
-      <Title>Hola q tal</Title>
+      <Title centered>Nuestros productos</Title>
     </PageTemplate>
   );
 };
