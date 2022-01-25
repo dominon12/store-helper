@@ -5,6 +5,8 @@ const StyledH3 = styled.h3`
   font-size: 1rem;
   text-transform: uppercase;
   font-weight: bold;
+  line-height: 1.6;
+  margin: 0;
 `;
 
 const Label: FC = ({ children }) => {
