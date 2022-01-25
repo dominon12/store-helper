@@ -1,3 +1,4 @@
+import { FC } from "react";
 import styled from "styled-components";
 
 import Footer from "./Footer";
@@ -16,7 +17,7 @@ const ContentWrapper = styled.main`
   padding: 1rem;
 `;
 
-export default function PageTemplate({ children }) {
+const PageTemplate: FC = ({ children }) => {
   return (
     <PageWrapper>
       <Header />
@@ -26,4 +27,6 @@ export default function PageTemplate({ children }) {
       <Footer />
     </PageWrapper>
   );
-}
+};
+
+export default PageTemplate;

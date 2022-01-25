@@ -1,3 +1,4 @@
+import { FC } from "react";
 import styled from "styled-components";
 
 const StyledHeader = styled.header`
@@ -5,6 +6,8 @@ const StyledHeader = styled.header`
   top: 0;
 `;
 
-export default function Header() {
+const Header: FC = () => {
   return <StyledHeader>Header</StyledHeader>;
-}
+};
+
+export default Header;

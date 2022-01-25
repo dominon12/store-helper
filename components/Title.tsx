@@ -1,3 +1,4 @@
+import { FC } from "react";
 import styled from "styled-components";
 
 const StyledH1 = styled.h1`
@@ -5,6 +6,8 @@ const StyledH1 = styled.h1`
   margin: 0;
 `;
 
-export default function Title({ children }) {
+const Title: FC = ({ children }) => {
   return <StyledH1>{children}</StyledH1>;
-}
+};
+
+export default Title;

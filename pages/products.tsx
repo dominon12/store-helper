@@ -1,9 +1,10 @@
 import Head from "next/head";
+import { NextPage } from "next";
 
 import PageTemplate from "../components/PageTemplate";
 import Title from "../components/Title";
 
-export default function Products() {
+const Products: NextPage = () => {
   return (
     <PageTemplate>
       <Head>
@@ -13,4 +14,6 @@ export default function Products() {
       <Title>Hola q tal</Title>
     </PageTemplate>
   );
-}
+};
+
+export default Products;
