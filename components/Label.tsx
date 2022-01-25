@@ -2,7 +2,7 @@ import { FC } from "react";
 import styled from "styled-components";
 
 const StyledH3 = styled.h3`
-  font-size: 1.2rem;
+  font-size: 1rem;
   text-transform: uppercase;
   font-weight: bold;
 `;

@@ -8,9 +8,8 @@ import MenuLink from "./MenuLink";
 const StyledHeader = styled.header`
   position: sticky;
   top: 0;
-  /* height: 80px; */
   padding: 0.5rem;
-  border-bottom: 1px solid var(--color-details);
+  border-bottom: 2px solid var(--color-details);
   display: flex;
   align-items: center;
   justify-content: space-between;
