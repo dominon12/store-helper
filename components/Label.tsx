@@ -9,8 +9,12 @@ const StyledH3 = styled.h3`
   margin: 0;
 `;
 
-const Label: FC = ({ children }) => {
-  return <StyledH3>{children}</StyledH3>;
+interface Props {
+  className?: string;
+}
+
+const Label: FC<Props> = ({ children, className }) => {
+  return <StyledH3 className={className}>{children}</StyledH3>;
 };
 
 export default Label;
