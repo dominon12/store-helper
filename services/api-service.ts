@@ -7,14 +7,20 @@ export const URLS = {
   auth: baseUrl + "accounts/",
 };
 
-export async function performGET<T>(url: string) {
+export async function performGET<T>(url: string, token?: string | null) {
   let response: RequestResult<T> = {
     data: null,
     error: null,
   };
 
+  let headers: HeadersInit = {};
+
+  if (token) {
+    headers["Authorization"] = `Token ${token}`;
+  }
+
   try {
-    const res = await fetch(url);
+    const res = await fetch(url, { headers });
     response.data = await res.json();
 
     if (!res.ok) throw new Error("API Error");
@@ -25,19 +31,29 @@ export async function performGET<T>(url: string) {
   return response;
 }
 
-export async function performPOST<T>(url: string, body: any) {
+export async function performPOST<T>(
+  url: string,
+  body: any,
+  token?: string | null
+) {
   let response: RequestResult<T> = {
     data: null,
     error: null,
   };
 
+  let headers: HeadersInit = {
+    "Content-Type": "application/json",
+  };
+
+  if (token) {
+    headers["Authorization"] = `Token ${token}`;
+  }
+
   try {
     const res = await fetch(url, {
       method: "POST",
       body: JSON.stringify(body),
-      headers: {
-        "Content-Type": "application/json",
-      },
+      headers,
     });
     response.data = await res.json();
 

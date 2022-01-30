@@ -116,7 +116,8 @@ class UserStore {
 
   private async _fetchUserData() {
     const userDataRes = await performGET<{ is_superuser: boolean }>(
-      URLS.auth + "current/"
+      URLS.auth + "current/",
+      this.authToken
     );
 
     if (userDataRes.error || !userDataRes.data) {
