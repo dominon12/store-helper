@@ -17,8 +17,8 @@ const Product: NextPage<Props> = ({ product }) => {
     <PageTemplate>
       <Head>
         <title>
-          {product.data && !product.error && product.data.name + " | "} Product
-          page
+          {product.data && !product.error && product.data.name + " | "} Pagina
+          del producto
         </title>
       </Head>
 
