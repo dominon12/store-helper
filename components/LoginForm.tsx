@@ -2,6 +2,7 @@ import { FC, FormEvent, useState } from "react";
 import styled from "styled-components";
 
 import { FormData } from "../types/system-types";
+import Button from "./Button";
 import Input from "./Input";
 
 const Form = styled.form`
@@ -65,6 +66,7 @@ const LoginForm: FC = () => {
           maxLengthValidator: 15,
         }}
       />
+      <Button>Iniciar sesión</Button>
     </Form>
   );
 };
