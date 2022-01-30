@@ -1,4 +1,11 @@
-import { FC, HTMLInputTypeAttribute, useEffect } from "react";
+import {
+  ChangeEvent,
+  FC,
+  forwardRef,
+  HTMLInputTypeAttribute,
+  useEffect,
+  useState,
+} from "react";
 import styled from "styled-components";
 
 import Label from "./Label";
@@ -10,8 +17,18 @@ const FieldWrapper = styled.label`
   display: block;
 `;
 
-const InputLabel = styled(Label)`
+const InputLabel = styled(Label)<{ required?: boolean }>`
   margin-bottom: 0.2rem;
+
+  ${(props) =>
+    props.required &&
+    `
+    ::after {
+      content: "*";
+      color: red;
+      margin-left: 0.5rem;
+    }
+  `}
 `;
 
 const InputField = styled.input<{ invalid: boolean }>`
@@ -38,45 +55,53 @@ const FieldError = styled(Paragraph)`
 interface Props {
   value: string;
   setValue: (value: string) => void;
-  errors: string[];
-  setErrors: (errors: string[]) => void;
-  touched: boolean;
-  setTouched: (touched: boolean) => void;
   labelText: string;
   placeholderText: string;
   type: HTMLInputTypeAttribute;
+  required?: boolean;
   validators?: Validators;
   className?: string;
 }
 
-const Input: FC<Props> = (props) => {
-  useEffect(() => {
-    if (!props.touched) {
-      props.setTouched(true);
-    }
+const Input = forwardRef<HTMLInputElement, Props>((props, ref): JSX.Element => {
+  const [touched, setTouched] = useState(false);
+  const [errors, setErrors] = useState<string[]>([]);
 
-    if (props.validators && props.touched) {
+  useEffect(() => {
+    if (props.validators && touched) {
       const errors = validateFormField(props.value, props.validators);
-      props.setErrors(errors);
+      setErrors(errors);
     }
   }, [props.value]);
 
+  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
+    if (!touched) {
+      setTouched(true);
+    }
+
+    props.setValue(e.target.value);
+  };
+
   return (
     <FieldWrapper className={props.className}>
-      <InputLabel>{props.labelText}</InputLabel>
+      <InputLabel required={props.required}>{props.labelText}</InputLabel>
       <InputField
+        data-valid={props.required ? errors.length === 0 && touched : true}
+        data-touched={touched}
+        ref={ref}
         value={props.value}
-        onChange={(e) => props.setValue(e.target.value)}
+        onChange={handleChange}
         placeholder={props.placeholderText}
         type={props.type}
-        invalid={props.errors.length > 0 && props.touched}
+        invalid={errors.length > 0 && touched}
       />
-      {props.errors.length > 0 &&
-        props.errors.map((error, index) => (
+      {errors.length > 0 &&
+        errors.map((error, index) => (
           <FieldError key={index}>{error}</FieldError>
         ))}
     </FieldWrapper>
   );
-};
+});
 
+Input.displayName = "Input";
 export default Input;

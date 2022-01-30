@@ -1,7 +1,6 @@
-import { FC, FormEvent, useState } from "react";
+import { FC, FormEvent, useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 
-import { FormData } from "../types/system-types";
 import Button from "./Button";
 import Input from "./Input";
 
@@ -15,18 +14,33 @@ const FormField = styled(Input)`
 `;
 
 const LoginForm: FC = () => {
-  const [formData, setFormData] = useState<FormData>({
-    username: { value: "", errors: [], touched: false },
-    password: { value: "", errors: [], touched: false },
+  const [formData, setFormData] = useState({
+    username: "",
+    password: "",
   });
+  const usernameInputRef = useRef<HTMLInputElement>(null);
+  const passwordInputRef = useRef<HTMLInputElement>(null);
 
-  const changeFieldData =
-    <T extends unknown>(fieldName: string, propName: keyof FormData[""]) =>
-    (value: T) => {
-      const formDataCopy = JSON.parse(JSON.stringify(formData));
-      formDataCopy[fieldName][propName] = value;
-      setFormData(formDataCopy);
-    };
+  const [formValid, setFormValid] = useState(false);
+
+  const checkFormValid = () => {
+    const formFields = [usernameInputRef, passwordInputRef];
+
+    const invalidFields = formFields.filter(
+      (formFieldRef) => formFieldRef?.current?.dataset.valid === "false"
+    );
+
+    return invalidFields.length === 0;
+  };
+
+  useEffect(() => {
+    const valid = checkFormValid();
+    setFormValid(valid);
+  }, [formData]);
+
+  const changeFieldValue = (fieldName: string) => (value: string) => {
+    setFormData((prev) => ({ ...prev, [fieldName]: value }));
+  };
 
   const handleFormSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -35,12 +49,9 @@ const LoginForm: FC = () => {
   return (
     <Form onSubmit={handleFormSubmit}>
       <FormField
-        value={formData.username.value}
-        setValue={changeFieldData("username", "value")}
-        errors={formData.username.errors}
-        setErrors={changeFieldData("username", "errors")}
-        touched={formData.username.touched}
-        setTouched={changeFieldData("username", "touched")}
+        ref={usernameInputRef}
+        value={formData.username}
+        setValue={changeFieldValue("username")}
         labelText="Nombre de usuario"
         placeholderText="Username"
         type="text"
@@ -49,14 +60,12 @@ const LoginForm: FC = () => {
           minLengthValidator: 8,
           maxLengthValidator: 15,
         }}
+        required
       />
       <FormField
-        value={formData.password.value}
-        setValue={changeFieldData("password", "value")}
-        errors={formData.password.errors}
-        setErrors={changeFieldData("password", "errors")}
-        touched={formData.password.touched}
-        setTouched={changeFieldData("password", "touched")}
+        ref={passwordInputRef}
+        value={formData.password}
+        setValue={changeFieldValue("password")}
         labelText="Contraseña"
         placeholderText="Password"
         type="password"
@@ -65,8 +74,9 @@ const LoginForm: FC = () => {
           minLengthValidator: 8,
           maxLengthValidator: 15,
         }}
+        required
       />
-      <Button>Iniciar sesión</Button>
+      <Button disabled={!formValid}>Iniciar sesión</Button>
     </Form>
   );
 };

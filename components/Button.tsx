@@ -24,19 +24,40 @@ const StyledButton = styled.button`
     transition: transform var(--transition-off) ease-out;
   }
 
-  :hover,
-  :focus {
+  :not(:disabled):hover,
+  :not(:disabled):focus {
+    ::after {
+      transform: translate(8px, 8px);
+      transition: transform var(--transition-on) ease-out;
+    }
+  }
+
+  :not(:disabled):active {
     ::after {
       transform: translate(0, 0);
       transition: transform var(--transition-on) ease-out;
     }
   }
+
+  :disabled {
+    color: var(--color-gray);
+    border-color: var(--color-light-gray);
+    cursor: not-allowed;
+
+    ::after {
+      background-color: var(--color-gray);
+    }
+  }
 `;
 
-interface Props {}
+interface Props {
+  disabled?: boolean;
+}
 
 const Button: FC<Props> = (props) => {
-  return <StyledButton>{props.children}</StyledButton>;
+  return (
+    <StyledButton disabled={props.disabled}>{props.children}</StyledButton>
+  );
 };
 
 export default Button;
