@@ -24,3 +24,24 @@ export async function performGET<T>(url: string) {
 
   return response;
 }
+
+export async function performPOST<T>(url: string, body: any) {
+  let response: RequestResult<T> = {
+    data: null,
+    error: null,
+  };
+
+  try {
+    const res = await fetch(url, {
+      method: "POST",
+      body: JSON.stringify(body),
+    });
+    response.data = await res.json();
+
+    if (!res.ok) throw new Error("API Error");
+  } catch (e) {
+    response.error = (e as Error).toString();
+  }
+
+  return response;
+}
