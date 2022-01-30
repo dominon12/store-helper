@@ -2,8 +2,11 @@ import { FC } from "react";
 import styled from "styled-components";
 import { MdQrCodeScanner, MdMenuBook } from "react-icons/md";
 import { FaLock } from "react-icons/fa";
+import { GrLogout } from "react-icons/gr";
+import { observer } from "mobx-react-lite";
 
 import MenuLink from "./MenuLink";
+import userStore from "../store/userStore";
 
 const StyledHeader = styled.header`
   position: sticky;
@@ -30,10 +33,19 @@ const Header: FC = () => {
       </HeaderPart>
       <HeaderPart>
         <MenuLink label="Catálogo" href="/products" Icon={MdMenuBook} />
-        <MenuLink label="Login" href="/login" Icon={FaLock} withLeftMargin />
+        {userStore.isAuthenticated ? (
+          <MenuLink
+            label="Log Out"
+            href="/logout"
+            Icon={GrLogout}
+            withLeftMargin
+          />
+        ) : (
+          <MenuLink label="Log In" href="/login" Icon={FaLock} withLeftMargin />
+        )}
       </HeaderPart>
     </StyledHeader>
   );
 };
 
-export default Header;
+export default observer(Header);

@@ -21,12 +21,17 @@ class UserStore {
     this._isLoading = true;
 
     const tokenError = await this._fetchAuthToken(username, password);
-    // if (tokenError) this._errors.push(tokenError);
+    if (tokenError) this._errors.push(tokenError);
 
     const userDataError = await this._fetchUserData();
-    // if (userDataError) this._errors.push(userDataError);
+    if (userDataError) this._errors.push(userDataError);
 
     this._isLoading = false;
+  }
+
+  logout() {
+    this.user = null;
+    this.authToken = null;
   }
 
   get user() {
@@ -94,32 +99,30 @@ class UserStore {
   }
 
   private async _fetchAuthToken(username: string, password: string) {
-    // const authTokenRes = await performPOST<{ token: string }>(
-    //   URLS.auth + "token/",
-    //   { username, password }
-    // );
+    const authTokenRes = await performPOST<{ token: string }>(
+      URLS.auth + "token/",
+      { username, password }
+    );
 
-    // if (authTokenRes.error || !authTokenRes.data) {
-    //   return authTokenRes.error || "Error fetching auth token";
-    // } else {
-    //   const authTokenData = authTokenRes.data;
-    //   this.authToken = authTokenData.token;
-    // }
-    this.authToken = "secret-token";
+    if (authTokenRes.error || !authTokenRes.data) {
+      return authTokenRes.error || "Error fetching auth token";
+    } else {
+      const authTokenData = authTokenRes.data;
+      this.authToken = authTokenData.token;
+    }
   }
 
   private async _fetchUserData() {
-    // const userDataRes = await performGET<{ is_superuser: boolean }>(
-    //   URLS.auth + "current/"
-    // );
+    const userDataRes = await performGET<{ is_superuser: boolean }>(
+      URLS.auth + "current/"
+    );
 
-    // if (userDataRes.error || !userDataRes.data) {
-    //   return userDataRes.error || "Error fetching user data";
-    // } else {
-    //   const userData = userDataRes.data;
-    //   this.user = { isAdmin: userData.is_superuser };
-    // }
-    this.user = { isAdmin: true };
+    if (userDataRes.error || !userDataRes.data) {
+      return userDataRes.error || "Error fetching user data";
+    } else {
+      const userData = userDataRes.data;
+      this.user = { isAdmin: userData.is_superuser };
+    }
   }
 }
 
