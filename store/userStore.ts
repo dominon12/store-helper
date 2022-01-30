@@ -2,6 +2,7 @@ import { makeAutoObservable } from "mobx";
 
 import { performGET, performPOST, URLS } from "./../services/api-service";
 import { User } from "../types/api-types";
+import { wait } from "../services/helper-service";
 
 class UserStore {
   private _user: User | null = null;
@@ -19,6 +20,7 @@ class UserStore {
   async authenticate(username: string, password: string) {
     this._errors = [];
     this._isLoading = true;
+    await wait(1000);
 
     const tokenError = await this._fetchAuthToken(username, password);
     if (tokenError) this._errors.push(tokenError);

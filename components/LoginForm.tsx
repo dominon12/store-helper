@@ -1,7 +1,11 @@
+import { observer } from "mobx-react-lite";
+import { useRouter } from "next/router";
 import { FC, FormEvent, useEffect, useRef, useState } from "react";
 import styled from "styled-components";
+import userStore from "../store/userStore";
 
 import Button from "./Button";
+import ErrorData from "./ErrorData";
 import Input from "./Input";
 
 const Form = styled.form`
@@ -14,6 +18,8 @@ const FormField = styled(Input)`
 `;
 
 const LoginForm: FC = () => {
+  const router = useRouter();
+
   const [formData, setFormData] = useState({
     username: "",
     password: "",
@@ -42,8 +48,14 @@ const LoginForm: FC = () => {
     setFormData((prev) => ({ ...prev, [fieldName]: value }));
   };
 
-  const handleFormSubmit = (e: FormEvent<HTMLFormElement>) => {
+  const handleFormSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+
+    await userStore.authenticate(formData.username, formData.password);
+
+    if (userStore.errors.length === 0) {
+      router.push("/products");
+    }
   };
 
   return (
@@ -76,9 +88,14 @@ const LoginForm: FC = () => {
         }}
         required
       />
-      <Button disabled={!formValid}>Iniciar sesión</Button>
+
+      <ErrorData errorMessage={userStore.errors.join(", ")} />
+
+      <Button loading={userStore.isLoading} disabled={!formValid}>
+        Iniciar sesión
+      </Button>
     </Form>
   );
 };
 
-export default LoginForm;
+export default observer(LoginForm);

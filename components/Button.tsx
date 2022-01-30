@@ -52,11 +52,14 @@ const StyledButton = styled.button`
 
 interface Props {
   disabled?: boolean;
+  loading?: boolean;
 }
 
 const Button: FC<Props> = (props) => {
   return (
-    <StyledButton disabled={props.disabled}>{props.children}</StyledButton>
+    <StyledButton disabled={props.disabled}>
+      {props.loading ? "Cargando..." : props.children}
+    </StyledButton>
   );
 };
 
