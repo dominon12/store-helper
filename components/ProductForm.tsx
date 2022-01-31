@@ -1,9 +1,12 @@
-import { FC, useRef, useState } from "react";
+import { useRouter } from "next/router";
+import { ChangeEvent, FC, useEffect, useRef, useState } from "react";
 import styled from "styled-components";
-import { changeFieldValue } from "../services/form-service";
+
 import FormTemplate from "./FormTemplate";
-import ImageUploader from "./ImageUploader";
 import Input from "./Input";
+import userStore from "../store/userStore";
+import ProductService from "../services/ProductService";
+import { changeFieldValue, checkFormValid } from "../services/form-service";
 
 const Wrapper = styled.section`
   display: flex;
@@ -13,26 +16,55 @@ const FormField = styled(Input)`
   margin-bottom: 1rem;
 `;
 
-const AddProductForm: FC = (props) => {
+interface Props {}
+
+const ProductForm: FC<Props> = (props) => {
+  const router = useRouter();
+
   const [formData, setFormData] = useState<{ [key: string]: string }>({
-    title: "",
+    name: "",
     description: "",
     price: "",
   });
+  const [image, setImage] = useState<File | null>(null);
 
-  const titleInputRef = useRef<HTMLInputElement>(null);
+  const nameInputRef = useRef<HTMLInputElement>(null);
   const descriptionInputRef = useRef<HTMLInputElement>(null);
   const priceInputRef = useRef<HTMLInputElement>(null);
+  const imageInputRef = useRef<HTMLInputElement>(null);
 
   const [errors, setErrors] = useState<string[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [formValid, setFormValid] = useState(false);
 
-  const handleFormSubmit = () => {};
+  useEffect(() => {
+    const valid = checkFormValid([
+      nameInputRef,
+      descriptionInputRef,
+      priceInputRef,
+      imageInputRef,
+    ]);
+    setFormValid(valid);
+  }, [formData]);
+
+  const uploadImage = (e: ChangeEvent<HTMLInputElement>) => {
+    const { files } = e.target;
+    if (files) setImage(files[0]);
+  };
+
+  const handleFormSubmit = async () => {
+    ProductService.add({
+      formData,
+      image,
+      setErrors,
+      setIsLoading,
+      authToken: userStore.authToken,
+      router,
+    });
+  };
 
   return (
     <Wrapper>
-      <ImageUploader />
       <FormTemplate
         submitCallback={handleFormSubmit}
         errors={errors}
@@ -41,9 +73,9 @@ const AddProductForm: FC = (props) => {
         buttonText="Guardar"
       >
         <FormField
-          ref={titleInputRef}
-          value={formData.title}
-          setValue={changeFieldValue("title", setFormData)}
+          ref={nameInputRef}
+          value={formData.name}
+          setValue={changeFieldValue("name", setFormData)}
           labelText="Nombre del producto"
           placeholderText="Nombre del producto"
           type="text"
@@ -81,9 +113,21 @@ const AddProductForm: FC = (props) => {
           }}
           required
         />
+
+        <FormField
+          setValue={uploadImage}
+          labelText="Imagen"
+          placeholderText="Imagen"
+          type="file"
+          validators={{
+            emptyStringValidator: true,
+          }}
+          accept="image/*"
+          required
+        />
       </FormTemplate>
     </Wrapper>
   );
 };
 
-export default AddProductForm;
+export default ProductForm;

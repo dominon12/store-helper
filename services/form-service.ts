@@ -1,4 +1,4 @@
-import { Dispatch, RefObject, SetStateAction } from "react";
+import { ChangeEvent, Dispatch, RefObject, SetStateAction } from "react";
 import { Validators } from "./../types/system-types";
 
 export function validateFormField(value: string, validators: Validators) {
@@ -41,8 +41,8 @@ export const changeFieldValue =
       }>
     >
   ) =>
-  (value: string) => {
-    setFormData((prev) => ({ ...prev, [fieldName]: value }));
+  (e: ChangeEvent<HTMLInputElement>) => {
+    setFormData((prev) => ({ ...prev, [fieldName]: e.target.value }));
   };
 
 export function checkFormValid(formFields: RefObject<HTMLInputElement>[]) {

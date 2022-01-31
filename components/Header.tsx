@@ -1,8 +1,7 @@
 import { FC } from "react";
 import styled from "styled-components";
-import { MdQrCodeScanner, MdMenuBook } from "react-icons/md";
+import { MdQrCodeScanner, MdMenuBook, MdExitToApp } from "react-icons/md";
 import { FaLock } from "react-icons/fa";
-import { GrLogout } from "react-icons/gr";
 import { observer } from "mobx-react-lite";
 
 import MenuLink from "./MenuLink";
@@ -37,7 +36,7 @@ const Header: FC = () => {
           <MenuLink
             label="Log Out"
             href="/logout"
-            Icon={GrLogout}
+            Icon={MdExitToApp}
             withLeftMargin
           />
         ) : (

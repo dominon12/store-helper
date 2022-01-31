@@ -1,4 +1,4 @@
-import { RequestResult } from "../types/system-types";
+import { PostRequestOptions, RequestResult } from "../types/system-types";
 
 const baseUrl = "http://127.0.0.1:8000/api/v1/";
 
@@ -34,25 +34,23 @@ export async function performGET<T>(url: string, token?: string | null) {
 export async function performPOST<T>(
   url: string,
   body: any,
-  token?: string | null
+  options?: PostRequestOptions
 ) {
   let response: RequestResult<T> = {
     data: null,
     error: null,
   };
-
-  let headers: HeadersInit = {
-    "Content-Type": "application/json",
-  };
-
-  if (token) {
-    headers["Authorization"] = `Token ${token}`;
-  }
+  // form headers
+  let headers: HeadersInit = {};
+  if (options?.token) headers["Authorization"] = `Token ${options.token}`;
+  if (options?.contentType) headers["Content-Type"] = options.contentType;
+  // form body
+  const payload = options?.serialize ? JSON.stringify(body) : body;
 
   try {
     const res = await fetch(url, {
       method: "POST",
-      body: JSON.stringify(body),
+      body: payload,
       headers,
     });
     response.data = await res.json();

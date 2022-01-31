@@ -1,6 +1,5 @@
 import {
   ChangeEvent,
-  FC,
   forwardRef,
   HTMLInputTypeAttribute,
   useEffect,
@@ -54,15 +53,16 @@ const FieldError = styled(Paragraph)`
 `;
 
 interface Props {
-  value: string;
-  setValue: (value: string) => void;
+  setValue: (e: ChangeEvent<HTMLInputElement>) => void;
   labelText: string;
   placeholderText: string;
   type: HTMLInputTypeAttribute;
+  value?: string;
   required?: boolean;
   validators?: Validators;
   className?: string;
   big?: boolean;
+  accept?: string;
 }
 
 const Input = forwardRef<HTMLInputElement, Props>((props, ref): JSX.Element => {
@@ -71,7 +71,7 @@ const Input = forwardRef<HTMLInputElement, Props>((props, ref): JSX.Element => {
 
   useEffect(() => {
     if (props.validators && touched) {
-      const errors = validateFormField(props.value, props.validators);
+      const errors = validateFormField(props.value ?? "", props.validators);
       setErrors(errors);
     }
   }, [props.value]);
@@ -81,7 +81,7 @@ const Input = forwardRef<HTMLInputElement, Props>((props, ref): JSX.Element => {
       setTouched(true);
     }
 
-    props.setValue(e.target.value);
+    props.setValue(e);
   };
 
   return (
@@ -96,6 +96,7 @@ const Input = forwardRef<HTMLInputElement, Props>((props, ref): JSX.Element => {
         placeholder={props.placeholderText}
         type={props.type}
         invalid={errors.length > 0 && touched}
+        accept={props.accept}
         big={props.big}
       />
       {errors.length > 0 &&

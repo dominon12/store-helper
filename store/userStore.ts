@@ -103,7 +103,8 @@ class UserStore {
   private async _fetchAuthToken(username: string, password: string) {
     const authTokenRes = await performPOST<{ token: string }>(
       URLS.auth + "token/",
-      { username, password }
+      { username, password },
+      { contentType: "application/json", serialize: true }
     );
 
     if (authTokenRes.error || !authTokenRes.data) {

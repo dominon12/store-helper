@@ -3,7 +3,7 @@ import { NextPage } from "next";
 import Head from "next/head";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
-import AddProductForm from "../../components/AddProductForm";
+import AddProductForm from "../../components/ProductForm";
 
 import PageHeader from "../../components/PageHeader";
 import userStore from "../../store/userStore";
