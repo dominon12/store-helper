@@ -5,12 +5,13 @@ import {
   useEffect,
   useState,
 } from "react";
-import styled from "styled-components";
+import styled, { css } from "styled-components";
 
 import Label from "./Label";
 import { Validators } from "../types/system-types";
 import { validateFormField } from "../services/form-service";
 import Paragraph from "./Paragraph";
+import useFormFieldProps from "../hooks/useFormFieldProps";
 
 const FieldWrapper = styled.label`
   display: block;
@@ -30,7 +31,7 @@ const InputLabel = styled(Label)<{ required?: boolean }>`
   `}
 `;
 
-const InputField = styled.input<{ invalid: boolean; big?: boolean }>`
+const formFieldStyles = css<{ invalid: boolean }>`
   width: 100%;
   padding: 0.8rem;
   outline: none;
@@ -39,13 +40,16 @@ const InputField = styled.input<{ invalid: boolean; big?: boolean }>`
   transition: border-color var(--transition-on) ease;
 
   ${(props) => props.invalid && "border-color: var(--color-details);"};
-  ${(props) => props.big && "height: 150px;"};
 
   :hover,
   :focus {
     border-color: ${(props) => !props.invalid && "var(--color-gray)"};
     transition: border-color var(--transition-on) ease;
   }
+`;
+
+const InputField = styled.input<{ invalid: boolean }>`
+  ${formFieldStyles}
 `;
 
 const FieldError = styled(Paragraph)`
@@ -61,44 +65,32 @@ interface Props {
   required?: boolean;
   validators?: Validators;
   className?: string;
-  big?: boolean;
   accept?: string;
 }
 
 const Input = forwardRef<HTMLInputElement, Props>((props, ref): JSX.Element => {
-  const [touched, setTouched] = useState(false);
-  const [errors, setErrors] = useState<string[]>([]);
+  const { errors, ...formFieldProps } = useFormFieldProps<HTMLInputElement>({
+    setValue: props.setValue,
+    required: props.required,
+    validators: props.validators,
+    value: props.value,
+  });
 
-  useEffect(() => {
-    if (props.validators && touched) {
-      const errors = validateFormField(props.value ?? "", props.validators);
-      setErrors(errors);
-    }
-  }, [props.value]);
-
-  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
-    if (!touched) {
-      setTouched(true);
-    }
-
-    props.setValue(e);
+  const allProps = {
+    ...formFieldProps,
+    ref,
+    placeholder: props.placeholderText,
+    required: props.required,
+    type: props.type,
+    accept: props.accept,
   };
 
   return (
     <FieldWrapper className={props.className}>
       <InputLabel required={props.required}>{props.labelText}</InputLabel>
-      <InputField
-        data-valid={props.required ? errors.length === 0 && touched : true}
-        data-touched={touched}
-        ref={ref}
-        value={props.value}
-        onChange={handleChange}
-        placeholder={props.placeholderText}
-        type={props.type}
-        invalid={errors.length > 0 && touched}
-        accept={props.accept}
-        big={props.big}
-      />
+
+      <InputField {...allProps} />
+
       {errors.length > 0 &&
         errors.map((error, index) => (
           <FieldError key={index}>{error}</FieldError>

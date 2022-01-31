@@ -98,7 +98,6 @@ const ProductForm: FC<Props> = (props) => {
             minLengthValidator: 20,
           }}
           required
-          big
         />
 
         <FormField
@@ -108,9 +107,7 @@ const ProductForm: FC<Props> = (props) => {
           labelText="Precio"
           placeholderText="Precio"
           type="number"
-          validators={{
-            emptyStringValidator: true,
-          }}
+          validators={{ emptyStringValidator: true }}
           required
         />
 
