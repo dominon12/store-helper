@@ -1,59 +1,13 @@
-import {
-  ChangeEvent,
-  forwardRef,
-  HTMLInputTypeAttribute,
-  useEffect,
-  useState,
-} from "react";
-import styled, { css } from "styled-components";
+import { ChangeEvent, forwardRef, HTMLInputTypeAttribute } from "react";
+import styled from "styled-components";
 
-import Label from "./Label";
+import FormFieldWrapper from "./FormFieldWrapper";
 import { Validators } from "../types/system-types";
-import { validateFormField } from "../services/form-service";
-import Paragraph from "./Paragraph";
 import useFormFieldProps from "../hooks/useFormFieldProps";
-
-const FieldWrapper = styled.label`
-  display: block;
-`;
-
-const InputLabel = styled(Label)<{ required?: boolean }>`
-  margin-bottom: 0.2rem;
-
-  ${(props) =>
-    props.required &&
-    `
-    ::after {
-      content: "*";
-      color: red;
-      margin-left: 0.5rem;
-    }
-  `}
-`;
-
-const formFieldStyles = css<{ invalid: boolean }>`
-  width: 100%;
-  padding: 0.8rem;
-  outline: none;
-  border: 2px solid var(--color-light-gray);
-  border-radius: 6px;
-  transition: border-color var(--transition-on) ease;
-
-  ${(props) => props.invalid && "border-color: var(--color-details);"};
-
-  :hover,
-  :focus {
-    border-color: ${(props) => !props.invalid && "var(--color-gray)"};
-    transition: border-color var(--transition-on) ease;
-  }
-`;
+import formFieldStyles from "../styles/formFieldStyles";
 
 const InputField = styled.input<{ invalid: boolean }>`
   ${formFieldStyles}
-`;
-
-const FieldError = styled(Paragraph)`
-  color: var(--color-details);
 `;
 
 interface Props {
@@ -86,16 +40,14 @@ const Input = forwardRef<HTMLInputElement, Props>((props, ref): JSX.Element => {
   };
 
   return (
-    <FieldWrapper className={props.className}>
-      <InputLabel required={props.required}>{props.labelText}</InputLabel>
-
+    <FormFieldWrapper
+      labelText={props.labelText}
+      className={props.className}
+      required={props.required}
+      errors={errors}
+    >
       <InputField {...allProps} />
-
-      {errors.length > 0 &&
-        errors.map((error, index) => (
-          <FieldError key={index}>{error}</FieldError>
-        ))}
-    </FieldWrapper>
+    </FormFieldWrapper>
   );
 });
 
