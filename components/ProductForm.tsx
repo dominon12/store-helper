@@ -1,9 +1,10 @@
 import { useRouter } from "next/router";
 import { ChangeEvent, FC, useEffect, useRef, useState } from "react";
-import styled from "styled-components";
+import styled, { css } from "styled-components";
 
 import FormTemplate from "./FormTemplate";
 import Input from "./Input";
+import Multiline from "./Multiline";
 import userStore from "../store/userStore";
 import ProductService from "../services/ProductService";
 import { changeFieldValue, checkFormValid } from "../services/form-service";
@@ -12,8 +13,16 @@ const Wrapper = styled.section`
   display: flex;
 `;
 
-const FormField = styled(Input)`
+const formFieldStyles = css`
   margin-bottom: 1rem;
+`;
+
+const InputField = styled(Input)`
+  ${formFieldStyles}
+`;
+
+const TextAreaField = styled(Multiline)`
+  ${formFieldStyles}
 `;
 
 interface Props {}
@@ -29,7 +38,7 @@ const ProductForm: FC<Props> = (props) => {
   const [image, setImage] = useState<File | null>(null);
 
   const nameInputRef = useRef<HTMLInputElement>(null);
-  const descriptionInputRef = useRef<HTMLInputElement>(null);
+  const descriptionInputRef = useRef<HTMLTextAreaElement>(null);
   const priceInputRef = useRef<HTMLInputElement>(null);
   const imageInputRef = useRef<HTMLInputElement>(null);
 
@@ -72,7 +81,7 @@ const ProductForm: FC<Props> = (props) => {
         isValid={formValid}
         buttonText="Guardar"
       >
-        <FormField
+        <InputField
           ref={nameInputRef}
           value={formData.name}
           setValue={changeFieldValue("name", setFormData)}
@@ -86,13 +95,12 @@ const ProductForm: FC<Props> = (props) => {
           required
         />
 
-        <FormField
+        <TextAreaField
           ref={descriptionInputRef}
           value={formData.description}
           setValue={changeFieldValue("description", setFormData)}
           labelText="Descripción"
           placeholderText="Descripción"
-          type="text"
           validators={{
             emptyStringValidator: true,
             minLengthValidator: 20,
@@ -100,7 +108,7 @@ const ProductForm: FC<Props> = (props) => {
           required
         />
 
-        <FormField
+        <InputField
           ref={priceInputRef}
           value={formData.price}
           setValue={changeFieldValue("price", setFormData)}
@@ -111,7 +119,7 @@ const ProductForm: FC<Props> = (props) => {
           required
         />
 
-        <FormField
+        <InputField
           setValue={uploadImage}
           labelText="Imagen"
           placeholderText="Imagen"

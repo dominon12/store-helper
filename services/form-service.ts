@@ -41,11 +41,13 @@ export const changeFieldValue =
       }>
     >
   ) =>
-  (e: ChangeEvent<HTMLInputElement>) => {
+  (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     setFormData((prev) => ({ ...prev, [fieldName]: e.target.value }));
   };
 
-export function checkFormValid(formFields: RefObject<HTMLInputElement>[]) {
+export function checkFormValid(
+  formFields: RefObject<HTMLInputElement | HTMLTextAreaElement>[]
+) {
   const invalidFields = formFields.filter(
     (formFieldRef) => formFieldRef?.current?.dataset.valid === "false"
   );
