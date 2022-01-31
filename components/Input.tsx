@@ -31,7 +31,7 @@ const InputLabel = styled(Label)<{ required?: boolean }>`
   `}
 `;
 
-const InputField = styled.input<{ invalid: boolean }>`
+const InputField = styled.input<{ invalid: boolean; big?: boolean }>`
   width: 100%;
   padding: 0.8rem;
   outline: none;
@@ -40,6 +40,7 @@ const InputField = styled.input<{ invalid: boolean }>`
   transition: border-color var(--transition-on) ease;
 
   ${(props) => props.invalid && "border-color: var(--color-details);"};
+  ${(props) => props.big && "height: 150px;"};
 
   :hover,
   :focus {
@@ -61,6 +62,7 @@ interface Props {
   required?: boolean;
   validators?: Validators;
   className?: string;
+  big?: boolean;
 }
 
 const Input = forwardRef<HTMLInputElement, Props>((props, ref): JSX.Element => {
@@ -94,6 +96,7 @@ const Input = forwardRef<HTMLInputElement, Props>((props, ref): JSX.Element => {
         placeholder={props.placeholderText}
         type={props.type}
         invalid={errors.length > 0 && touched}
+        big={props.big}
       />
       {errors.length > 0 &&
         errors.map((error, index) => (

@@ -1,3 +1,4 @@
+import { Dispatch, RefObject, SetStateAction } from "react";
 import { Validators } from "./../types/system-types";
 
 export function validateFormField(value: string, validators: Validators) {
@@ -29,4 +30,25 @@ export function validateFormField(value: string, validators: Validators) {
   }
 
   return errors;
+}
+
+export const changeFieldValue =
+  (
+    fieldName: string,
+    setFormData: Dispatch<
+      SetStateAction<{
+        [key: string]: string;
+      }>
+    >
+  ) =>
+  (value: string) => {
+    setFormData((prev) => ({ ...prev, [fieldName]: value }));
+  };
+
+export function checkFormValid(formFields: RefObject<HTMLInputElement>[]) {
+  const invalidFields = formFields.filter(
+    (formFieldRef) => formFieldRef?.current?.dataset.valid === "false"
+  );
+
+  return invalidFields.length === 0;
 }
