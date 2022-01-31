@@ -1,4 +1,4 @@
-import { RequestResult } from "../types/system-types";
+import { PostRequestOptions, RequestResult } from "../types/system-types";
 
 const baseUrl = "http://127.0.0.1:8000/api/v1/";
 
@@ -7,14 +7,20 @@ export const URLS = {
   auth: baseUrl + "accounts/",
 };
 
-export async function performGET<T>(url: string) {
+export async function performGET<T>(url: string, token?: string | null) {
   let response: RequestResult<T> = {
     data: null,
     error: null,
   };
 
+  let headers: HeadersInit = {};
+
+  if (token) {
+    headers["Authorization"] = `Token ${token}`;
+  }
+
   try {
-    const res = await fetch(url);
+    const res = await fetch(url, { headers });
     response.data = await res.json();
 
     if (!res.ok) throw new Error("API Error");
@@ -25,19 +31,27 @@ export async function performGET<T>(url: string) {
   return response;
 }
 
-export async function performPOST<T>(url: string, body: any) {
+export async function performPOST<T>(
+  url: string,
+  body: any,
+  options?: PostRequestOptions
+) {
   let response: RequestResult<T> = {
     data: null,
     error: null,
   };
+  // form headers
+  let headers: HeadersInit = {};
+  if (options?.token) headers["Authorization"] = `Token ${options.token}`;
+  if (options?.contentType) headers["Content-Type"] = options.contentType;
+  // form body
+  const payload = options?.serialize ? JSON.stringify(body) : body;
 
   try {
     const res = await fetch(url, {
       method: "POST",
-      body: JSON.stringify(body),
-      headers: {
-        "Content-Type": "application/json",
-      },
+      body: payload,
+      headers,
     });
     response.data = await res.json();
 

@@ -1,17 +1,12 @@
 import { observer } from "mobx-react-lite";
 import { useRouter } from "next/router";
-import { FC, FormEvent, useEffect, useRef, useState } from "react";
+import { FC, useEffect, useRef, useState } from "react";
 import styled from "styled-components";
+
+import { changeFieldValue, checkFormValid } from "../services/form-service";
 import userStore from "../store/userStore";
-
-import Button from "./Button";
-import ErrorData from "./ErrorData";
+import FormTemplate from "./FormTemplate";
 import Input from "./Input";
-
-const Form = styled.form`
-  width: 450px;
-  margin: 0 auto;
-`;
 
 const FormField = styled(Input)`
   margin-bottom: 1rem;
@@ -20,7 +15,7 @@ const FormField = styled(Input)`
 const LoginForm: FC = () => {
   const router = useRouter();
 
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<{ [key: string]: string }>({
     username: "",
     password: "",
   });
@@ -29,28 +24,12 @@ const LoginForm: FC = () => {
 
   const [formValid, setFormValid] = useState(false);
 
-  const checkFormValid = () => {
-    const formFields = [usernameInputRef, passwordInputRef];
-
-    const invalidFields = formFields.filter(
-      (formFieldRef) => formFieldRef?.current?.dataset.valid === "false"
-    );
-
-    return invalidFields.length === 0;
-  };
-
   useEffect(() => {
-    const valid = checkFormValid();
+    const valid = checkFormValid([usernameInputRef, passwordInputRef]);
     setFormValid(valid);
   }, [formData]);
 
-  const changeFieldValue = (fieldName: string) => (value: string) => {
-    setFormData((prev) => ({ ...prev, [fieldName]: value }));
-  };
-
-  const handleFormSubmit = async (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-
+  const handleFormSubmit = async () => {
     await userStore.authenticate(formData.username, formData.password);
 
     if (userStore.errors.length === 0) {
@@ -59,11 +38,17 @@ const LoginForm: FC = () => {
   };
 
   return (
-    <Form onSubmit={handleFormSubmit}>
+    <FormTemplate
+      submitCallback={handleFormSubmit}
+      errors={userStore.errors}
+      isLoading={userStore.isLoading}
+      isValid={formValid}
+      buttonText="Iniciar sesión"
+    >
       <FormField
         ref={usernameInputRef}
         value={formData.username}
-        setValue={changeFieldValue("username")}
+        setValue={changeFieldValue("username", setFormData)}
         labelText="Nombre de usuario"
         placeholderText="Username"
         type="text"
@@ -77,7 +62,7 @@ const LoginForm: FC = () => {
       <FormField
         ref={passwordInputRef}
         value={formData.password}
-        setValue={changeFieldValue("password")}
+        setValue={changeFieldValue("password", setFormData)}
         labelText="Contraseña"
         placeholderText="Password"
         type="password"
@@ -88,13 +73,7 @@ const LoginForm: FC = () => {
         }}
         required
       />
-
-      <ErrorData errorMessage={userStore.errors.join(", ")} />
-
-      <Button loading={userStore.isLoading} disabled={!formValid}>
-        Iniciar sesión
-      </Button>
-    </Form>
+    </FormTemplate>
   );
 };
 

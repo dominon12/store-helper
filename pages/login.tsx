@@ -3,10 +3,9 @@ import { NextPage } from "next";
 import Head from "next/head";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
-import LoginForm from "../components/LoginForm";
 
-import PageTemplate from "../components/PageTemplate";
-import Title from "../components/Title";
+import LoginForm from "../components/LoginForm";
+import PageHeader from "../components/PageHeader";
 import userStore from "../store/userStore";
 
 const Login: NextPage = () => {
@@ -17,15 +16,15 @@ const Login: NextPage = () => {
   }, []);
 
   return (
-    <PageTemplate>
+    <>
       <Head>
         <title>Autentificación</title>
       </Head>
 
-      <Title centered>Autentificación</Title>
+      <PageHeader title="Autentificación" />
 
       <LoginForm />
-    </PageTemplate>
+    </>
   );
 };
 

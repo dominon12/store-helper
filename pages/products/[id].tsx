@@ -1,8 +1,7 @@
 import { GetServerSideProps, NextPage } from "next";
 import Head from "next/head";
-import ApiResponseTemplate from "../../components/ApiResponseTemplate";
 
-import PageTemplate from "../../components/PageTemplate";
+import ApiResponseTemplate from "../../components/ApiResponseTemplate";
 import ProductInfo from "../../components/ProductInfo";
 import { performGET, URLS } from "../../services/api-service";
 import { Product as IProduct } from "../../types/api-types";
@@ -14,7 +13,7 @@ interface Props {
 
 const Product: NextPage<Props> = ({ product }) => {
   return (
-    <PageTemplate>
+    <>
       <Head>
         <title>
           {product.data && !product.error && product.data.name + " | "} Pagina
@@ -26,7 +25,7 @@ const Product: NextPage<Props> = ({ product }) => {
         render={() => <ProductInfo product={product.data as IProduct} />}
         error={product.error}
       />
-    </PageTemplate>
+    </>
   );
 };
 

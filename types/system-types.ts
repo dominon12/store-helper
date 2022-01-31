@@ -8,3 +8,9 @@ export interface Validators {
   minLengthValidator?: number;
   maxLengthValidator?: number;
 }
+
+export interface PostRequestOptions {
+  token?: string | null;
+  contentType?: string;
+  serialize?: boolean;
+}
