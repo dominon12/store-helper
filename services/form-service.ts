@@ -54,3 +54,13 @@ export function checkFormValid(
 
   return invalidFields.length === 0;
 }
+
+export function makeFormValid(
+  formFields: RefObject<HTMLInputElement | HTMLTextAreaElement>[]
+) {
+  formFields.forEach((formFieldRef) => {
+    if (formFieldRef?.current?.dataset) {
+      formFieldRef.current.dataset.valid = "true";
+    }
+  });
+}

@@ -7,7 +7,13 @@ import Input from "./Input";
 import Multiline from "./Multiline";
 import userStore from "../store/userStore";
 import ProductService from "../services/ProductService";
-import { changeFieldValue, checkFormValid } from "../services/form-service";
+import {
+  changeFieldValue,
+  checkFormValid,
+  makeFormValid,
+} from "../services/form-service";
+import { Product } from "../types/api-types";
+import ProductImage from "./ProductImage";
 
 const Wrapper = styled.section`
   display: flex;
@@ -25,7 +31,9 @@ const TextAreaField = styled(Multiline)`
   ${formFieldStyles}
 `;
 
-interface Props {}
+interface Props {
+  product?: Product;
+}
 
 const ProductForm: FC<Props> = (props) => {
   const router = useRouter();
@@ -44,9 +52,29 @@ const ProductForm: FC<Props> = (props) => {
 
   const [errors, setErrors] = useState<string[]>([]);
   const [isLoading, setIsLoading] = useState(false);
-  const [formValid, setFormValid] = useState(false);
+  const [formValid, setFormValid] = useState(props.product ? true : false);
+
+  const initializeFormWithProductValues = () => {
+    if (props.product) {
+      setFormData({
+        name: props.product.name,
+        description: props.product.description,
+        price: props.product.price.toString(),
+      });
+      makeFormValid([
+        nameInputRef,
+        descriptionInputRef,
+        priceInputRef,
+        imageInputRef,
+      ]);
+    }
+  };
 
   useEffect(() => {
+    initializeFormWithProductValues();
+  }, []);
+
+  const handleValidateForm = () => {
     const valid = checkFormValid([
       nameInputRef,
       descriptionInputRef,
@@ -54,6 +82,10 @@ const ProductForm: FC<Props> = (props) => {
       imageInputRef,
     ]);
     setFormValid(valid);
+  };
+
+  useEffect(() => {
+    handleValidateForm();
   }, [formData]);
 
   const uploadImage = (e: ChangeEvent<HTMLInputElement>) => {
@@ -62,18 +94,36 @@ const ProductForm: FC<Props> = (props) => {
   };
 
   const handleFormSubmit = async () => {
-    ProductService.add({
-      formData,
-      image,
-      setErrors,
-      setIsLoading,
-      authToken: userStore.authToken,
-      router,
-    });
+    if (props.product) {
+      ProductService.edit({
+        formData,
+        product: props.product,
+        image,
+        setErrors,
+        setIsLoading,
+        authToken: userStore.authToken,
+        router,
+      });
+    } else {
+      ProductService.add({
+        formData,
+        image,
+        setErrors,
+        setIsLoading,
+        authToken: userStore.authToken,
+        router,
+      });
+    }
+  };
+
+  const imageSrc = () => {
+    if (image) return URL.createObjectURL(image);
+    if (props.product) return props.product.image;
   };
 
   return (
     <Wrapper>
+      <ProductImage src={imageSrc()} alt="Uploaded image" />
       <FormTemplate
         submitCallback={handleFormSubmit}
         errors={errors}
@@ -128,7 +178,7 @@ const ProductForm: FC<Props> = (props) => {
             emptyStringValidator: true,
           }}
           accept="image/*"
-          required
+          required={!(props.product && !image)}
         />
       </FormTemplate>
     </Wrapper>

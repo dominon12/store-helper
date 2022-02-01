@@ -4,6 +4,7 @@ import styled from "styled-components";
 import { Product } from "../types/api-types";
 import Label from "./Label";
 import Paragraph from "./Paragraph";
+import ProductAdminButtons from "./ProductAdminButtons";
 import Title from "./Title";
 
 const Wrapper = styled.div`
@@ -56,6 +57,7 @@ const ProductInfo: FC<Props> = ({ product }) => {
           <Title>{product.name}</Title>
           <Description>{product.description}</Description>
           <Label>{product.price} €</Label>
+          <ProductAdminButtons productId={product.pk} />
         </ProductData>
       </Content>
     </Wrapper>

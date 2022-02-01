@@ -9,8 +9,9 @@ export interface Validators {
   maxLengthValidator?: number;
 }
 
-export interface PostRequestOptions {
+export interface RequestOptions {
   token?: string | null;
   contentType?: string;
   serialize?: boolean;
+  method?: "POST" | "PATCH";
 }
