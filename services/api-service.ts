@@ -1,4 +1,4 @@
-import { PostRequestOptions, RequestResult } from "../types/system-types";
+import { RequestOptions, RequestResult } from "../types/system-types";
 
 const baseUrl = "http://127.0.0.1:8000/api/v1/";
 
@@ -31,10 +31,10 @@ export async function performGET<T>(url: string, token?: string | null) {
   return response;
 }
 
-export async function performPOST<T>(
+export async function performRequestWithBody<T>(
   url: string,
   body: any,
-  options?: PostRequestOptions
+  options?: RequestOptions
 ) {
   let response: RequestResult<T> = {
     data: null,
@@ -49,7 +49,7 @@ export async function performPOST<T>(
 
   try {
     const res = await fetch(url, {
-      method: "POST",
+      method: options?.method ?? "POST",
       body: payload,
       headers,
     });
