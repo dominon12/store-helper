@@ -1,11 +1,11 @@
 import { RequestOptions, RequestResult } from "../types/system-types";
 
-// const baseUrl = "http://127.0.0.1:8000/api/v1/";
-const baseUrl = "https://dominon12.pythonanywhere.com/api/v1/";
+// const apiBaseUrl = "http://127.0.0.1:8000/api/v1/";
+const apiBaseUrl = "https://dominon12.pythonanywhere.com/api/v1/";
 
 export const URLS = {
-  products: baseUrl + "products/",
-  auth: baseUrl + "accounts/",
+  products: apiBaseUrl + "products/",
+  auth: apiBaseUrl + "accounts/",
 };
 
 export async function performGET<T>(url: string, token?: string | null) {
