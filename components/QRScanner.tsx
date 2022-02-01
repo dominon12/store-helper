@@ -15,6 +15,10 @@ const Wrapper = styled.section`
   align-items: center;
   justify-content: center;
   margin-top: 4rem;
+
+  @media (max-width: 415px) {
+    margin-top: 2rem;
+  }
 `;
 
 const ErrorWrapper = styled(ErrorData)`

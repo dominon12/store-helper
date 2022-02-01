@@ -19,6 +19,7 @@ const Wrapper = styled.div`
 const Content = styled.article`
   display: flex;
   justify-content: center;
+  align-items: center;
 `;
 
 const ImageWrapper = styled.div`

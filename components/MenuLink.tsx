@@ -23,6 +23,10 @@ const MenuItem = styled.div<{ withLeftMargin?: boolean; isSelected?: boolean }>`
   svg {
     font-size: 1.6rem;
     margin-right: 0.5rem;
+
+    @media (max-width: 415px) {
+      font-size: 1.2rem;
+    }
   }
 `;
 

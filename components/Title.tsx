@@ -5,6 +5,10 @@ const StyledH1 = styled.h1<{ centered?: boolean }>`
   font-size: 2rem;
   margin: 0;
   text-align: ${(props) => (props.centered ? "center" : "left")};
+
+  @media (max-width: 415px) {
+    font-size: 1.5rem;
+  }
 `;
 
 interface Props {
