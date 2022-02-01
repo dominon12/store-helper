@@ -18,10 +18,10 @@ const Login: NextPage = () => {
   return (
     <>
       <Head>
-        <title>Autentificación</title>
+        <title>Autenticación</title>
       </Head>
 
-      <PageHeader title="Autentificación" />
+      <PageHeader title="Autenticación" />
 
       <LoginForm />
     </>

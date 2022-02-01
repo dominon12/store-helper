@@ -8,7 +8,7 @@ const Home: NextPage = () => {
   return (
     <>
       <Head>
-        <title>Pagina inicial</title>
+        <title>QR Escaner</title>
       </Head>
 
       <PageHeader title="Escanea el codigo del producto" />

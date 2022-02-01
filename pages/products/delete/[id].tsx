@@ -5,7 +5,7 @@ import { useRouter } from "next/router";
 import AdminComponentWrapper from "../../../components/AdminComponentWrapper";
 import DeleteProductConfirmation from "../../../components/DeleteProductConfirmation";
 
-const DeleteProduct: NextPage = (props) => {
+const DeleteProduct: NextPage = () => {
   const router = useRouter();
   const productId = router.query.id ? +router.query.id : undefined;
 

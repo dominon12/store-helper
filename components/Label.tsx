@@ -7,6 +7,10 @@ const StyledH3 = styled.h3`
   font-weight: bold;
   line-height: 1.6;
   margin: 0;
+
+  @media (max-width: 415px) {
+    font-size: 0.9rem;
+  }
 `;
 
 interface Props {

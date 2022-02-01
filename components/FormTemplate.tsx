@@ -4,7 +4,7 @@ import Button from "./Button";
 import ErrorData from "./ErrorData";
 
 const Form = styled.form`
-  width: 450px;
+  max-width: 450px;
   margin: 0 auto;
 `;
 

@@ -17,11 +17,26 @@ const StyledHeader = styled.header`
   display: flex;
   align-items: center;
   justify-content: space-between;
+
+  @media (max-width: 425px) {
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+
+  @media (max-width: 368px) {
+    flex-direction: column;
+  }
 `;
 
 const HeaderPart = styled.div`
   display: flex;
   align-items: center;
+
+  :first-child {
+    @media (max-width: 368px) {
+      margin-bottom: 1rem;
+    }
+  }
 `;
 
 const Header: FC = () => {
