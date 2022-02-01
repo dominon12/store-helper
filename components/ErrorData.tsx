@@ -9,12 +9,13 @@ const ErrorContainer = styled.section`
 `;
 
 interface Props {
-  errorMessage?: string;
+  className?: string;
+  errorMessage?: string | null;
 }
 
-const ErrorData: FC<Props> = ({ errorMessage }) => {
+const ErrorData: FC<Props> = ({ errorMessage, className }) => {
   return errorMessage ? (
-    <ErrorContainer>
+    <ErrorContainer className={className}>
       <Label>{errorMessage}</Label>
     </ErrorContainer>
   ) : null;
