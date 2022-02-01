@@ -59,7 +59,11 @@ interface Props {
 
 const Button: FC<Props> = (props) => {
   return (
-    <StyledButton className={props.className} onClick={props.onClick} disabled={props.disabled}>
+    <StyledButton
+      className={props.className}
+      onClick={props.onClick}
+      disabled={props.disabled || props.loading}
+    >
       {props.loading ? "Cargando..." : props.children}
     </StyledButton>
   );

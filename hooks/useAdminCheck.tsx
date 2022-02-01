@@ -9,11 +9,10 @@ function useAdminCheck(user: User | null) {
   const [checking, setChecking] = useState(true);
 
   const checkPermissions = async () => {
-    await wait(1000);
-
     if (!user || !user.isAdmin) {
       router.push("/login");
     }
+    await wait(500);
     setChecking(false);
   };
 

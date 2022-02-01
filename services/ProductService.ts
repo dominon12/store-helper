@@ -1,4 +1,4 @@
-import { NextRouter } from "next/router";
+import { NextRouter, Router } from "next/router";
 import { Dispatch, SetStateAction } from "react";
 import { Product } from "../types/api-types";
 import { performRequestWithBody, URLS } from "./api-service";
@@ -21,6 +21,13 @@ interface EditProductProps {
   setIsLoading: Dispatch<SetStateAction<boolean>>;
   authToken: string | null;
   router: NextRouter;
+}
+
+interface DeleteProductProps {
+  productId: number;
+  router: NextRouter;
+  setIsLoading: Dispatch<SetStateAction<boolean>>;
+  authToken: string | null;
 }
 
 class ProductService {
@@ -91,6 +98,21 @@ class ProductService {
     } finally {
       props.setIsLoading(false);
     }
+  }
+
+  static async delete(props: DeleteProductProps) {
+    props.setIsLoading(true);
+
+    await wait(1000);
+
+    await fetch(URLS.products + props.productId + "/", {
+      method: "DELETE",
+      headers: { Authorization: `Token ${props.authToken}` },
+    });
+
+    props.setIsLoading(false);
+
+    props.router.push("/products");
   }
 }
 
