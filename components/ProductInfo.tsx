@@ -20,6 +20,10 @@ const Content = styled.article`
   display: flex;
   justify-content: center;
   align-items: center;
+
+  @media (max-width: 722px) {
+    flex-direction: column;
+  }
 `;
 
 const ImageWrapper = styled.div`
@@ -34,11 +38,29 @@ const ProductImage = styled(Image)`
     height: 100%;
     object-fit: contain;
   }
+
+  @media (max-width: 722px) {
+    width: 80%;
+  }
+  @media (max-width: 425px) {
+    width: 100%;
+  }
 `;
 
 const ProductData = styled.section`
   padding: 0 1.5rem;
   width: 50%;
+
+  @media (max-width: 722px) {
+    order: -1;
+    margin-bottom: 1rem;
+    width: 80%;
+  }
+
+  @media (max-width: 425px) {
+    margin-top: 2rem;
+    width: 100%;
+  }
 `;
 
 const Description = styled(Paragraph)`
