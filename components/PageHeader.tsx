@@ -9,8 +9,8 @@ const StyledPageHeader = styled.div`
   position: relative;
 
   @media (max-width: 415px) {
-    margin-top: 0.5rem;
-    margin-bottom: 1rem;
+    margin-top: 1rem;
+    margin-bottom: 2rem;
   }
 `;
 
