@@ -1,11 +1,11 @@
 import { FC } from "react";
-import Image from "next/image";
 import styled from "styled-components";
+import Link from "next/link";
 
 import Label from "./Label";
-import { Product } from "../types/api-types";
 import Paragraph from "./Paragraph";
-import Link from "next/link";
+import ProductImage from "./ProductImage";
+import { Product } from "../types/api-types";
 
 const Card = styled.a`
   border-radius: 4px;
@@ -25,12 +25,6 @@ const Card = styled.a`
   }
 `;
 
-const ProductImage = styled(Image)`
-  height: 350px;
-  width: 100%;
-  object-fit: contain;
-`;
-
 const Name = styled.div`
   margin-top: 1rem;
   margin-bottom: 0.5rem;
@@ -44,12 +38,7 @@ const ProductCard: FC<Props> = ({ product }) => {
   return (
     <Link href={`/products/${product.pk}`} passHref>
       <Card>
-        <ProductImage
-          loader={() => product.image}
-          src={product.image}
-          height={350}
-          width={430}
-        />
+        <ProductImage src={product.image} alt={product.name} />
         <Name>
           <Label>{product.name}</Label>
         </Name>

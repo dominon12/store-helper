@@ -13,6 +13,7 @@ import {
   makeFormValid,
 } from "../services/form-service";
 import { Product } from "../types/api-types";
+import ProductImage from "./ProductImage";
 
 const Wrapper = styled.section`
   display: flex;
@@ -115,8 +116,14 @@ const ProductForm: FC<Props> = (props) => {
     }
   };
 
+  const imageSrc = () => {
+    if (image) return URL.createObjectURL(image);
+    if (props.product) return props.product.image;
+  };
+
   return (
     <Wrapper>
+      <ProductImage src={imageSrc()} alt="Uploaded image" />
       <FormTemplate
         submitCallback={handleFormSubmit}
         errors={errors}
