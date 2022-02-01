@@ -34,16 +34,34 @@ const QRScanner: FC = () => {
   const [scanResult, setScanResult] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
 
+  const checkPathnameValid = (pathname: string) => {
+    const [empty, products, productId, ...rest] = pathname.split("/");
+
+    if (rest.length !== 0) return false;
+    if (empty !== "") return false;
+    if (products !== "products") return false;
+    if (Number.isNaN(+productId)) return false;
+
+    return true;
+  };
+
   const handleProcessResults = (result: string | null) => {
     if (result) {
-      const productId = parseInt(result);
-
-      if (productId) router.push(`/products/${productId}`);
-      else setError("QR escaneado no es valido");
+      try {
+        const urlFromResult = new URL(result);
+        if (checkPathnameValid(urlFromResult.pathname)) {
+          router.push(urlFromResult.pathname);
+        } else {
+          throw new Error("QR escaneado no es valido");
+        }
+      } catch (e) {
+        setError((e as Error).toString());
+      }
     }
   };
 
   useEffect(() => {
+    console.log({ scanResult });
     handleProcessResults(scanResult);
   }, [scanResult]);
 

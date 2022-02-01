@@ -1,6 +1,8 @@
 import Image from "next/image";
 import { FC } from "react";
 import styled from "styled-components";
+import QRCode from "react-qr-code";
+
 import { Product } from "../types/api-types";
 import Label from "./Label";
 import Paragraph from "./Paragraph";
@@ -17,6 +19,12 @@ const Wrapper = styled.div`
 const Content = styled.article`
   display: flex;
   justify-content: center;
+`;
+
+const ImageWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 `;
 
 const ProductImage = styled(Image)`
@@ -46,13 +54,17 @@ const ProductInfo: FC<Props> = ({ product }) => {
   return (
     <Wrapper>
       <Content>
-        <ProductImage
-          src={product.image}
-          loader={() => product.image}
-          alt={product.name}
-          height={450}
-          width={450}
-        />
+        <ImageWrapper>
+          <ProductImage
+            src={product.image}
+            loader={() => product.image}
+            alt={product.name}
+            height={450}
+            width={450}
+          />
+          <QRCode value={window.location.pathname} />
+        </ImageWrapper>
+
         <ProductData>
           <Title>{product.name}</Title>
           <Description>{product.description}</Description>
