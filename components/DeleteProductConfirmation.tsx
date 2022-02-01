@@ -10,7 +10,7 @@ import userStore from "../store/userStore";
 
 const Wrapper = styled.section`
   height: 60vh;
-  width: 500px;
+  max-width: 500px;
   margin: 0 auto;
   display: flex;
   flex-direction: column;
@@ -24,6 +24,10 @@ const ButtonsWrapper = styled.div`
   justify-content: space-between;
   width: 200px;
   margin-top: 1.5rem;
+
+  @media (max-width: 388px) {
+    width: 150px;
+  }
 `;
 
 interface Props {
