@@ -1,19 +1,24 @@
-import { observer } from "mobx-react-lite";
 import { NextPage } from "next";
 import Head from "next/head";
-import useAdminCheck from "../../../hooks/useAdminCheck";
-import userStore from "../../../store/userStore";
+import { useRouter } from "next/router";
+
+import AdminComponentWrapper from "../../../components/AdminComponentWrapper";
+import DeleteProductConfirmation from "../../../components/DeleteProductConfirmation";
 
 const DeleteProduct: NextPage = (props) => {
-  useAdminCheck(userStore.user);
+  const router = useRouter();
+  const productId = router.query.id ? +router.query.id : undefined;
 
   return (
     <>
       <Head>
         <title>Eliminar producto</title>
       </Head>
+      <AdminComponentWrapper>
+        <DeleteProductConfirmation productId={productId} />
+      </AdminComponentWrapper>
     </>
   );
 };
 
-export default observer(DeleteProduct);
+export default DeleteProduct;

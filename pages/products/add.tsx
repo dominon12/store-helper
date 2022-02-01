@@ -1,26 +1,23 @@
-import { observer } from "mobx-react-lite";
 import { NextPage } from "next";
 import Head from "next/head";
 
 import AddProductForm from "../../components/ProductForm";
 import PageHeader from "../../components/PageHeader";
-import userStore from "../../store/userStore";
-import useAdminCheck from "../../hooks/useAdminCheck";
+import AdminComponentWrapper from "../../components/AdminComponentWrapper";
 
 const AddProduct: NextPage = () => {
-  useAdminCheck(userStore.user);
-
   return (
     <>
       <Head>
         <title>Añadir producto</title>
       </Head>
 
-      <PageHeader title="Añadir producto" />
-
-      <AddProductForm />
+      <AdminComponentWrapper>
+        <PageHeader title="Añadir producto" />
+        <AddProductForm />
+      </AdminComponentWrapper>
     </>
   );
 };
 
-export default observer(AddProduct);
+export default AddProduct;
