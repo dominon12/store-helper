@@ -1,13 +1,14 @@
 import Image from "next/image";
-import { FC } from "react";
+import { FC, useEffect, useState } from "react";
 import styled from "styled-components";
 import QRCode from "react-qr-code";
+import { useRouter } from "next/router";
 
-import { Product } from "../types/api-types";
 import Label from "./Label";
 import Paragraph from "./Paragraph";
 import ProductAdminButtons from "./ProductAdminButtons";
 import Title from "./Title";
+import { Product } from "../types/api-types";
 
 const Wrapper = styled.div`
   display: flex;
@@ -74,6 +75,15 @@ interface Props {
 }
 
 const ProductInfo: FC<Props> = ({ product }) => {
+  const router = useRouter();
+  const [pageHref, setPageHref] = useState("");
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      setPageHref(window.location.href);
+    }
+  }, [router.pathname]);
+
   return (
     <Wrapper>
       <Content>
@@ -85,7 +95,7 @@ const ProductInfo: FC<Props> = ({ product }) => {
             height={450}
             width={450}
           />
-          <QRCode value={window.location.pathname} />
+          <QRCode value={pageHref} />
         </ImageWrapper>
 
         <ProductData>
