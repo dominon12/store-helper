@@ -18,8 +18,13 @@ const PageWrapper = styled.div`
 `;
 
 const ContentWrapper = styled.main`
-  padding: 1rem;
+  padding: 1rem 0;
   padding-bottom: 2rem;
+
+  @media (max-width: 425px) {
+    padding: 0 1rem;
+    padding-bottom: 2rem;
+  }
 `;
 
 const PageTemplate: FC = ({ children }) => {
