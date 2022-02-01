@@ -1,10 +1,12 @@
 import { useRouter } from "next/router";
 import { ChangeEvent, FC, useEffect, useRef, useState } from "react";
 import styled, { css } from "styled-components";
+import { observer } from "mobx-react-lite";
 
 import FormTemplate from "./FormTemplate";
 import Input from "./Input";
 import Multiline from "./Multiline";
+import ProductImage from "./ProductImage";
 import userStore from "../store/userStore";
 import ProductService from "../services/ProductService";
 import {
@@ -13,7 +15,6 @@ import {
   makeFormValid,
 } from "../services/form-service";
 import { Product } from "../types/api-types";
-import ProductImage from "./ProductImage";
 
 const Wrapper = styled.section`
   display: flex;
@@ -185,4 +186,4 @@ const ProductForm: FC<Props> = (props) => {
   );
 };
 
-export default ProductForm;
+export default observer(ProductForm);

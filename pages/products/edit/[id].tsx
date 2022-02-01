@@ -1,6 +1,7 @@
 import { GetServerSideProps, NextPage } from "next";
 import Head from "next/head";
 
+import AdminComponentWrapper from "../../../components/AdminComponentWrapper";
 import ApiResponseTemplate from "../../../components/ApiResponseTemplate";
 import PageHeader from "../../../components/PageHeader";
 import ProductForm from "../../../components/ProductForm";
@@ -17,22 +18,23 @@ const EditProduct: NextPage<Props> = ({ product }) => {
     <>
       <Head>
         <title>
-          {product.data && !product.error && product.data.name + " | "} Pagina
-          del producto
+          Editar producto
+          {product.data && !product.error && product.data.name}
         </title>
       </Head>
-
-      <ApiResponseTemplate
-        render={() => {
-          return (
-            <>
-              <PageHeader title="Editar producto" />
-              <ProductForm product={product.data as Product} />
-            </>
-          );
-        }}
-        error={product.error}
-      />
+      <AdminComponentWrapper>
+        <ApiResponseTemplate
+          render={() => {
+            return (
+              <>
+                <PageHeader title="Editar producto" />
+                <ProductForm product={product.data as Product} />
+              </>
+            );
+          }}
+          error={product.error}
+        />
+      </AdminComponentWrapper>
     </>
   );
 };
