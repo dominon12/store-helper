@@ -8,6 +8,7 @@ const StyledButton = styled.button`
   border-radius: 4px;
   background-color: white;
   padding: 0.7rem 1rem;
+  color: var(--color-black);
 
   ::after {
     content: "";
