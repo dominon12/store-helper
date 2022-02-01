@@ -13,6 +13,7 @@ const StyledImage = styled(Image)`
 interface Props {
   src?: string;
   alt?: string;
+  className?: string;
 }
 
 const ProductImage: FC<Props> = (props) => {
@@ -21,6 +22,7 @@ const ProductImage: FC<Props> = (props) => {
 
   return (
     <StyledImage
+      className={props.className}
       loader={() => src}
       src={src}
       alt={alt}

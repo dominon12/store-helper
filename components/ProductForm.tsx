@@ -18,6 +18,19 @@ import { Product } from "../types/api-types";
 
 const Wrapper = styled.section`
   display: flex;
+
+  @media (max-width: 654px) {
+    flex-direction: column;
+  }
+`;
+
+const ImageWrapper = styled.div`
+  margin-right: 1rem;
+
+  @media (max-width: 654px) {
+    margin: 0 auto;
+    margin-bottom: 1rem;
+  }
 `;
 
 const formFieldStyles = css`
@@ -124,7 +137,9 @@ const ProductForm: FC<Props> = (props) => {
 
   return (
     <Wrapper>
-      <ProductImage src={imageSrc()} alt="Uploaded image" />
+      <ImageWrapper>
+        <ProductImage src={imageSrc()} alt="Uploaded image" />
+      </ImageWrapper>
       <FormTemplate
         submitCallback={handleFormSubmit}
         errors={errors}
