@@ -1,6 +1,7 @@
 import { RequestOptions, RequestResult } from "../types/system-types";
 
-const baseUrl = "http://127.0.0.1:8000/api/v1/";
+// const baseUrl = "http://127.0.0.1:8000/api/v1/";
+const baseUrl = "https://dominon12.pythonanywhere.com/api/v1/";
 
 export const URLS = {
   products: baseUrl + "products/",

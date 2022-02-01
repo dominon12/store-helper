@@ -34,11 +34,9 @@ const ImageWrapper = styled.div`
 `;
 
 const ProductImage = styled(Image)`
-  && {
-    width: 50%;
-    height: 100%;
-    object-fit: contain;
-  }
+  width: 50%;
+  height: 100%;
+  object-fit: contain;
 
   @media (max-width: 722px) {
     width: 80%;
@@ -48,13 +46,17 @@ const ProductImage = styled(Image)`
   }
 `;
 
+const QRCodeWrapper = styled.div`
+  margin-top: 1rem;
+`;
+
 const ProductData = styled.section`
   padding: 0 1.5rem;
   width: 50%;
 
   @media (max-width: 722px) {
     order: -1;
-    margin-bottom: 1rem;
+    margin-bottom: 2rem;
     width: 80%;
   }
 
@@ -65,9 +67,7 @@ const ProductData = styled.section`
 `;
 
 const Description = styled(Paragraph)`
-  && {
-    margin: 2rem 0;
-  }
+  margin: 2rem 0;
 `;
 
 interface Props {
@@ -95,7 +95,9 @@ const ProductInfo: FC<Props> = ({ product }) => {
             height={450}
             width={450}
           />
-          <QRCode value={pageHref} />
+          <QRCodeWrapper>
+            <QRCode value={pageHref} />
+          </QRCodeWrapper>
         </ImageWrapper>
 
         <ProductData>
