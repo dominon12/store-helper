@@ -4,7 +4,9 @@ import Head from "next/head";
 import ApiResponseTemplate from "../../../components/ApiResponseTemplate";
 import PageHeader from "../../../components/PageHeader";
 import ProductForm from "../../../components/ProductForm";
+import useAdminCheck from "../../../hooks/useAdminCheck";
 import { performGET, URLS } from "../../../services/api-service";
+import userStore from "../../../store/userStore";
 import { Product } from "../../../types/api-types";
 import { RequestResult } from "../../../types/system-types";
 
@@ -13,12 +15,14 @@ interface Props {
 }
 
 const EditProduct: NextPage<Props> = ({ product }) => {
+  useAdminCheck(userStore.user);
+
   return (
     <>
       <Head>
         <title>
-          {product.data && !product.error && product.data.name + " | "} Pagina
-          del producto
+          Editar producto
+          {product.data && !product.error && product.data.name}
         </title>
       </Head>
 

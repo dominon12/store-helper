@@ -1,6 +1,6 @@
 import { makeAutoObservable } from "mobx";
 
-import { performGET, performPOST, URLS } from "./../services/api-service";
+import { performGET, performRequestWithBody, URLS } from "./../services/api-service";
 import { User } from "../types/api-types";
 import { wait } from "../services/helper-service";
 
@@ -101,7 +101,7 @@ class UserStore {
   }
 
   private async _fetchAuthToken(username: string, password: string) {
-    const authTokenRes = await performPOST<{ token: string }>(
+    const authTokenRes = await performRequestWithBody<{ token: string }>(
       URLS.auth + "token/",
       { username, password },
       { contentType: "application/json", serialize: true }
