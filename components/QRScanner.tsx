@@ -65,7 +65,6 @@ const QRScanner: FC = () => {
   };
 
   useEffect(() => {
-    console.log({ scanResult });
     handleProcessResults(scanResult);
   }, [scanResult]);
 
