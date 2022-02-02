@@ -14,10 +14,10 @@ const Wrapper = styled.section`
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  margin-top: 4rem;
+  margin: 4rem 0;
 
   @media (max-width: 415px) {
-    margin-top: 2rem;
+    margin: 2rem 0;
   }
 `;
 
