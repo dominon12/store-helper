@@ -12,7 +12,7 @@ const StyledHeader = styled.header`
   top: 0;
   z-index: 100;
   padding: 1.5rem 0;
-  border-bottom: 2px solid var(--color-details);
+  border-bottom: 2px solid var(--color-black);
   background-color: var(--color-white);
   display: flex;
   align-items: center;
