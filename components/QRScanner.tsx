@@ -64,6 +64,13 @@ const QRScanner: FC = () => {
     }
   };
 
+  const handleError = (err: any) => {
+    setError(
+      err.toString() +
+        ". Por favor, dé acceso a su cámara para poder escanear el código qr"
+    );
+  };
+
   useEffect(() => {
     handleProcessResults(scanResult);
   }, [scanResult]);
@@ -73,7 +80,7 @@ const QRScanner: FC = () => {
       <QrReader
         delay={300}
         onScan={setScanResult}
-        onError={setError}
+        onError={handleError}
         style={previewStyle}
       />
       <ErrorWrapper errorMessage={error} />
