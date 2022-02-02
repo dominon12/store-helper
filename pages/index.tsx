@@ -2,6 +2,7 @@ import { NextPage } from "next";
 import Head from "next/head";
 
 import PageHeader from "../components/PageHeader";
+import ProductSearcher from "../components/ProductSearcher";
 import QRScanner from "../components/QRScanner";
 
 const Home: NextPage = () => {
@@ -14,6 +15,10 @@ const Home: NextPage = () => {
       <PageHeader title="Escanea el codigo del producto" />
 
       <QRScanner />
+
+      <PageHeader title="O busca por numero de referencia" />
+
+      <ProductSearcher />
     </>
   );
 };

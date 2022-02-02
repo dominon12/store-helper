@@ -1,8 +1,15 @@
 import { NextRouter, Router } from "next/router";
 import { Dispatch, SetStateAction } from "react";
 import { Product } from "../types/api-types";
-import { performRequestWithBody, URLS } from "./api-service";
+import { performGET, performRequestWithBody, URLS } from "./api-service";
 import { wait } from "./helper-service";
+
+interface GetProductProps {
+  productId: string;
+  setErrors: Dispatch<SetStateAction<string[]>>;
+  setIsLoading: Dispatch<SetStateAction<boolean>>;
+  router: NextRouter;
+}
 
 interface AddProductProps {
   formData: { [key: string]: string };
@@ -31,6 +38,26 @@ interface DeleteProductProps {
 }
 
 class ProductService {
+  static async get(props: GetProductProps) {
+    props.setIsLoading(true);
+
+    props.setErrors([]);
+
+    await wait(500);
+
+    const res = await performGET(URLS.products + props.productId);
+
+    props.setIsLoading(false);
+
+    if (res.error) {
+      props.setErrors([
+        "Producto con este número de referencia no existe o no se puede conectarse al servidor",
+      ]);
+    } else {
+      props.router.push(`/products/${props.productId}`);
+    }
+  }
+
   static async add(props: AddProductProps) {
     if (!props.image) {
       props.setErrors([
