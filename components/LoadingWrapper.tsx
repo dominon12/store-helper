@@ -1,5 +1,14 @@
 import { useRouter } from "next/router";
 import { FC, useEffect, useState } from "react";
+import { BallTriangle } from "react-loader-spinner";
+import styled from "styled-components";
+
+const LoaderWrapper = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 75vh;
+`;
 
 const LoadingWrapper: FC = ({ children }) => {
   const router = useRouter();
@@ -21,7 +30,17 @@ const LoadingWrapper: FC = ({ children }) => {
     };
   });
 
-  return <>{loading ? <div>Loading....</div> : children}</>;
+  return (
+    <>
+      {loading ? (
+        <LoaderWrapper>
+          <BallTriangle color="black" />
+        </LoaderWrapper>
+      ) : (
+        children
+      )}
+    </>
+  );
 };
 
 export default LoadingWrapper;
