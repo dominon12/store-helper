@@ -4,11 +4,11 @@ import Head from "next/head";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
 
-import LoginForm from "../components/LoginForm";
-import PageHeader from "../components/PageHeader";
-import userStore from "../store/userStore";
+import LoginForm from "../../components/LoginForm";
+import PageHeader from "../../components/PageHeader";
+import userStore from "../../store/userStore";
 
-const Login: NextPage = () => {
+const LoginPage: NextPage = () => {
   const router = useRouter();
 
   useEffect(() => {
@@ -28,4 +28,4 @@ const Login: NextPage = () => {
   );
 };
 
-export default observer(Login);
+export default observer(LoginPage);

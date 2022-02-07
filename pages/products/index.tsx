@@ -4,13 +4,13 @@ import { useRouter } from "next/router";
 import { observer } from "mobx-react-lite";
 import styled from "styled-components";
 
-import { performGET, URLS } from "../services/api-service";
-import { Product } from "../types/api-types";
-import { RequestResult } from "../types/system-types";
-import ProductsGrid from "../components/ProductsGrid";
-import userStore from "../store/userStore";
-import Button from "../components/Button";
-import PageHeader from "../components/PageHeader";
+import { performGET, URLS } from "../../services/api-service";
+import { Product } from "../../types/api-types";
+import { RequestResult } from "../../types/system-types";
+import ProductsGrid from "../../components/ProductsGrid";
+import userStore from "../../store/userStore";
+import Button from "../../components/Button";
+import PageHeader from "../../components/PageHeader";
 
 const ButtonWrapper = styled.div`
   display: flex;
