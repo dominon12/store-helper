@@ -110,7 +110,7 @@ class ProductService {
 
     try {
       const res = await performRequestWithBody<Product>(
-        URLS.products + props.product._id + "/",
+        URLS.products + props.product._id,
         productFormData,
         {
           token: props.authToken,
