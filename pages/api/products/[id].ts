@@ -1,11 +1,8 @@
-import { MulterRequest } from "./../../../middleware/image-upload-middleware";
 import { NextApiRequest, NextApiResponse } from "next";
 import nc from "next-connect";
-import imageUploadMiddleware from "../../../middleware/image-upload-middleware";
 
 import Product from "../../../models/Product";
 import dbConnect from "../../../services/db/dbConnect";
-import { baseUrl } from "../../../services/api-service";
 
 dbConnect();
 
@@ -26,12 +23,7 @@ apiRoute.delete(async (req, res) => {
   res.status(204).end();
 });
 
-apiRoute.use(imageUploadMiddleware);
-
-apiRoute.patch(async (req: NextApiRequest & MulterRequest, res) => {
-  if (req.file) {
-    req.body.image = baseUrl + req.file.path.replace("public/", "");
-  }
+apiRoute.patch(async (req, res) => {
   const product = await Product.findByIdAndUpdate(req.query.id, req.body, {
     new: true,
   });

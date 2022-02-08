@@ -1,11 +1,7 @@
-import { baseUrl } from "./../../../services/api-service";
 import { NextApiResponse, NextApiRequest } from "next";
 import nc from "next-connect";
 
 import dbConnect from "../../../services/db/dbConnect";
-import imageUploadMiddleware, {
-  MulterRequest,
-} from "../../../middleware/image-upload-middleware";
 import Product from "../../../models/Product";
 
 dbConnect();
@@ -22,10 +18,7 @@ apiRoute.get(async (req, res) => {
   res.status(200).json(products);
 });
 
-apiRoute.use(imageUploadMiddleware);
-
-apiRoute.post(async (req: NextApiRequest & MulterRequest, res) => {
-  req.body.image = baseUrl + req.file.path.replace("public/", "");
+apiRoute.post(async (req, res) => {
   const product = await Product.create(req.body);
   res.status(201).json(product);
 });
