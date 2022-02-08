@@ -1,3 +1,4 @@
+import { baseUrl } from "./../../../services/api-service";
 import { NextApiResponse, NextApiRequest } from "next";
 import nc from "next-connect";
 
@@ -24,7 +25,7 @@ apiRoute.get(async (req, res) => {
 apiRoute.use(imageUploadMiddleware);
 
 apiRoute.post(async (req: NextApiRequest & MulterRequest, res) => {
-  req.body.image = req.file.path.replace("public/", "");
+  req.body.image = baseUrl + req.file.path.replace("public/", "");
   const product = await Product.create(req.body);
   res.status(201).json(product);
 });

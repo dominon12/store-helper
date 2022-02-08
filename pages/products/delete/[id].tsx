@@ -7,7 +7,9 @@ import DeleteProductConfirmation from "../../../components/DeleteProductConfirma
 
 const DeleteProduct: NextPage = () => {
   const router = useRouter();
-  const productId = router.query.id ? +router.query.id : undefined;
+  const productId = Array.isArray(router.query.id)
+    ? router.query.id[0]
+    : router.query.id;
 
   return (
     <>

@@ -31,7 +31,7 @@ interface EditProductProps {
 }
 
 interface DeleteProductProps {
-  productId: number;
+  productId: string;
   router: NextRouter;
   setIsLoading: Dispatch<SetStateAction<boolean>>;
   authToken: string | null;
@@ -131,6 +131,8 @@ class ProductService {
     props.setIsLoading(true);
 
     await wait(1000);
+
+    console.log({ productId: props.productId });
 
     await fetch(URLS.products + props.productId + "/", {
       method: "DELETE",

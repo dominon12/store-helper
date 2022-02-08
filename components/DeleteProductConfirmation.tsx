@@ -31,7 +31,7 @@ const ButtonsWrapper = styled.div`
 `;
 
 interface Props {
-  productId?: number;
+  productId?: string;
 }
 
 const DeleteProductConfirmation: FC<Props> = (props) => {
@@ -52,6 +52,7 @@ const DeleteProductConfirmation: FC<Props> = (props) => {
       </Wrapper>
     );
   }
+
 
   const handleConfirmation = () => {
     if (props.productId) {

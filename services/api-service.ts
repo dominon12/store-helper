@@ -2,6 +2,7 @@ import { RequestOptions, RequestResult } from "../types/system-types";
 
 // const apiBaseUrl = "http://127.0.0.1:8000/api/v1/";
 // const apiBaseUrl = "https://dominon12.pythonanywhere.com/api/v1/";
+export const baseUrl = "http://localhost:3000/";
 const apiBaseUrl = "http://localhost:3000/api/";
 
 export const URLS = {
