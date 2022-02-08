@@ -26,7 +26,7 @@ const ProductsGrid: FC<Props> = ({ products }) => {
       render={() => (
         <GridContainer>
           {products.data?.map((product) => (
-            <ProductCard key={product.pk} product={product} />
+            <ProductCard key={product._id} product={product} />
           ))}
         </GridContainer>
       )}

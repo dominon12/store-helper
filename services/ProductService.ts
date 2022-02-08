@@ -86,7 +86,7 @@ class ProductService {
       );
 
       if (res.error || !res.data) throw new Error(res.error || "API Error");
-      else props.router.push(`/products/${res.data?.pk}`);
+      else props.router.push(`/products/${res.data?._id}`);
     } catch (e) {
       props.setErrors([(e as Error).toString()]);
     } finally {
@@ -110,7 +110,7 @@ class ProductService {
 
     try {
       const res = await performRequestWithBody<Product>(
-        URLS.products + props.product.pk + "/",
+        URLS.products + props.product._id + "/",
         productFormData,
         {
           token: props.authToken,
@@ -119,7 +119,7 @@ class ProductService {
       );
 
       if (res.error || !res.data) throw new Error(res.error || "API Error");
-      else props.router.push(`/products/${res.data?.pk}`);
+      else props.router.push(`/products/${res.data?._id}`);
     } catch (e) {
       props.setErrors([(e as Error).toString()]);
     } finally {

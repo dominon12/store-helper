@@ -36,7 +36,7 @@ interface Props {
 
 const ProductCard: FC<Props> = ({ product }) => {
   return (
-    <Link href={`/products/${product.pk}`} passHref>
+    <Link href={`/products/${product._id}`} passHref>
       <Card>
         <ProductImage src={product.image} alt={product.name} />
         <Name>

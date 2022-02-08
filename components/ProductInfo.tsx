@@ -104,7 +104,7 @@ const ProductInfo: FC<Props> = ({ product }) => {
           <Title>{product.name}</Title>
           <Description>{product.description}</Description>
           <Label>{product.price} €</Label>
-          <ProductAdminButtons productId={product.pk} />
+          <ProductAdminButtons productId={product._id} />
         </ProductData>
       </Content>
     </Wrapper>

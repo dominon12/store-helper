@@ -24,7 +24,7 @@ apiRoute.get(async (req, res) => {
 apiRoute.use(imageUploadMiddleware);
 
 apiRoute.post(async (req: NextApiRequest & MulterRequest, res) => {
-  req.body.image = req.file.path;
+  req.body.image = req.file.path.replace("public/", "");
   const product = await Product.create(req.body);
   res.status(201).json(product);
 });
