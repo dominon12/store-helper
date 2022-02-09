@@ -1,8 +1,8 @@
 import { NextApiResponse, NextApiRequest } from "next";
 import nc from "next-connect";
 
-import dbConnect from "../../../services/db/dbConnect";
-import Product from "../../../models/Product";
+import dbConnect from "../../../../services/db/dbConnect";
+import Product from "../../../../models/Product";
 
 dbConnect();
 
