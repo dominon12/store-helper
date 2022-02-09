@@ -1,11 +1,11 @@
 import { GetServerSideProps, NextPage } from "next";
 import Head from "next/head";
 
-import ApiResponseTemplate from "../../components/ApiResponseTemplate";
-import ProductInfo from "../../components/ProductInfo";
-import { performGET, URLS } from "../../services/api-service";
-import { Product as IProduct } from "../../types/api-types";
-import { RequestResult } from "../../types/system-types";
+import ApiResponseTemplate from "../../../components/ApiResponseTemplate";
+import ProductInfo from "../../../components/ProductInfo";
+import { URLS } from "../../../services/api-service";
+import Requester, { RequestResult } from "../../../services/Requester";
+import { Product as IProduct } from "../../../types/api-types";
 
 interface Props {
   product: RequestResult<IProduct>;
@@ -30,7 +30,9 @@ const Product: NextPage<Props> = ({ product }) => {
 };
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
-  const product = await performGET(URLS.products + context.query.id);
+  const product = await Requester.get({
+    url: URLS.products + context.query.id,
+  });
 
   return {
     props: { product },

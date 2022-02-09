@@ -89,8 +89,8 @@ const ProductInfo: FC<Props> = ({ product }) => {
       <Content>
         <ImageWrapper>
           <ProductImage
-            src={product.image}
-            loader={() => product.image}
+            src={product.image.src}
+            loader={() => product.image.src}
             alt={product.name}
             height={450}
             width={450}
@@ -104,7 +104,7 @@ const ProductInfo: FC<Props> = ({ product }) => {
           <Title>{product.name}</Title>
           <Description>{product.description}</Description>
           <Label>{product.price} €</Label>
-          <ProductAdminButtons productId={product.pk} />
+          <ProductAdminButtons productId={product._id} />
         </ProductData>
       </Content>
     </Wrapper>

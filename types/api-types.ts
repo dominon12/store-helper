@@ -1,9 +1,12 @@
 export interface Product {
-  pk: number;
+  _id: string;
   name: string;
   description: string;
   price: number;
-  image: string;
+  image: {
+    id: number;
+    src: string;
+  };
 }
 
 export interface User {
