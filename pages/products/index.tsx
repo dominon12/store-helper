@@ -4,13 +4,13 @@ import { useRouter } from "next/router";
 import { observer } from "mobx-react-lite";
 import styled from "styled-components";
 
-import { performGET, URLS } from "../../services/api-service";
+import { URLS } from "../../services/api-service";
 import { Product } from "../../types/api-types";
-import { RequestResult } from "../../types/system-types";
 import ProductsGrid from "../../components/ProductsGrid";
 import userStore from "../../store/userStore";
 import Button from "../../components/Button";
 import PageHeader from "../../components/PageHeader";
+import Requester, { RequestResult } from "../../services/Requester";
 
 const ButtonWrapper = styled.div`
   display: flex;
@@ -37,7 +37,7 @@ const Products: NextPage<Props> = ({ products }) => {
       </Head>
 
       <PageHeader title="Nuestros productos" />
-
+      {/* TODO: Put this code to "AddProductBtn" */}
       {userStore.isAuthenticated && userStore.user?.isAdmin ? (
         <ButtonWrapper>
           <Button onClick={() => router.push("/products/add")}>Añadir</Button>
@@ -50,7 +50,7 @@ const Products: NextPage<Props> = ({ products }) => {
 };
 
 export async function getServerSideProps() {
-  const products = await performGET<Product[]>(URLS.products);
+  const products = await Requester.get<Product[]>({ url: URLS.products });
 
   return {
     props: { products },

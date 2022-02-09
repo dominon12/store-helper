@@ -1,9 +1,10 @@
 import { FC } from "react";
 import styled from "styled-components";
-import { Product } from "../types/api-types";
-import { RequestResult } from "../types/system-types";
+
 import ApiResponseTemplate from "./ApiResponseTemplate";
 import ProductCard from "./ProductCard";
+import { Product } from "../types/api-types";
+import { RequestResult } from "../services/Requester";
 
 const GridContainer = styled.section`
   display: grid;

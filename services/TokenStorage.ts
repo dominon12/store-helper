@@ -1,3 +1,5 @@
+import Requester from "./Requester";
+
 interface Credentials {
   username?: string;
   password?: string;
@@ -34,21 +36,30 @@ class TokenStorage {
   }
 
   private set savedToken(token: string | null) {
-    if (token) localStorage.setItem(this.storageKey, token);
+    if (typeof window !== "undefined") {
+      if (token) {
+        if (this.savedToken !== token) {
+          // if there is a token and it's different from
+          // the saved one,  save it to local storage
+          localStorage.setItem(this.storageKey, token);
+        }
+      } else {
+        // if there is no passed token, remove localStorage item
+        localStorage.removeItem(this.storageKey);
+      }
+    }
   }
 
   private async fetchAuthToken(): Promise<string> {
-    const res = await fetch(this.authEndpoint, {
-      method: "POST",
-      body: JSON.stringify(this.credentials),
-      headers: {
-        "Content-Type": "application/json",
-      },
+    const res = await Requester.post<{ token: string }>({
+      url: this.authEndpoint,
+      body: this.credentials,
     });
 
-    if (!res.ok) throw new Error("Can't obtain auth token");
+    if (res.error) throw new Error(res.error);
+    if (!res.data) throw new Error("No data was returned for AuthToken API");
 
-    const { token } = await res.json();
+    const { token } = res.data;
     return token;
   }
 }

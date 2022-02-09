@@ -1,17 +1,17 @@
-interface RequestResult<T> {
+export interface RequestResult<T> {
   data: T | null;
   error: string | null;
 }
 
 interface GetRequestProps {
   url: string;
-  token?: string;
+  token?: string | null;
 }
 
 interface PostRequestProps {
   url: string;
   body: any;
-  token: string | null;
+  token?: string | null;
   dontSerialize?: boolean;
 }
 
@@ -57,7 +57,9 @@ class Requester {
       contentType: props.dontSerialize ? undefined : "application/json",
     });
 
-    const payload = this.formBody(props.body, { serialize: !props.dontSerialize });
+    const payload = this.formBody(props.body, {
+      serialize: !props.dontSerialize,
+    });
 
     try {
       // send request
