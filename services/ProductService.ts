@@ -3,6 +3,8 @@ import { Dispatch, SetStateAction } from "react";
 import { Product } from "../types/api-types";
 import { performGET, performRequestWithBody, URLS } from "./api-service";
 import { wait } from "./helper-service";
+import ImageUploader from "./ImageUploader";
+import Requester from "./Requester";
 
 interface GetProductProps {
   productId: string;
@@ -67,26 +69,24 @@ class ProductService {
     }
 
     props.setIsLoading(true);
-
-    await wait(1000);
-
-    const productFormData = new FormData();
-    productFormData.append("name", props.formData.name);
-    productFormData.append("description", props.formData.description);
-    productFormData.append("price", props.formData.price);
-    productFormData.append("image", props.image);
+    await wait(500);
 
     try {
-      const res = await performRequestWithBody<Product>(
+      // upload an image
+      const imageProps = await ImageUploader.upload(props.image);
+      (props.formData as any).image = imageProps;
+      // make a request
+      const res = await Requester.post<Product>(
         URLS.products,
-        productFormData,
-        {
-          token: props.authToken,
-        }
+        props.formData,
+        props.authToken
       );
-
-      if (res.error || !res.data) throw new Error(res.error || "API Error");
-      else props.router.push(`/products/${res.data?._id}`);
+      // throw new error in case of error
+      if (res.error) throw new Error(res.error);
+      // throw new error if no data was returned
+      if (!res.data) throw new Error("No API data was returned");
+      // navigate user to product's page
+      else props.router.push(`/products/${res.data._id}`);
     } catch (e) {
       props.setErrors([(e as Error).toString()]);
     } finally {

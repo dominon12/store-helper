@@ -17,7 +17,7 @@ const AdminButton = styled(Button)`
 `;
 
 interface Props {
-  productId: number;
+  productId: string;
 }
 
 const ProductAdminButtons: FC<Props> = (props) => {

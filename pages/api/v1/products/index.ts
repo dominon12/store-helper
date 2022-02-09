@@ -19,14 +19,9 @@ apiRoute.get(async (req, res) => {
 });
 
 apiRoute.post(async (req, res) => {
+  console.log({ body: req.body });
   const product = await Product.create(req.body);
   res.status(201).json(product);
 });
 
 export default apiRoute;
-
-export const config = {
-  api: {
-    bodyParser: false,
-  },
-};
