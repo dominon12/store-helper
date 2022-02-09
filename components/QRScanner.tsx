@@ -44,7 +44,6 @@ const QRScanner: FC = () => {
     if (rest.length !== 0) return false;
     if (empty !== "") return false;
     if (products !== "products") return false;
-    if (Number.isNaN(+productId)) return false;
 
     return true;
   };

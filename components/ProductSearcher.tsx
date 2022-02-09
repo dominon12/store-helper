@@ -45,7 +45,7 @@ const ProductSearcher: FC = () => {
         setValue={(e) => setSearchQuery(e.target.value)}
         labelText="Numero de referencia"
         placeholderText="Escribe el numero de referencia"
-        type="number"
+        type="text"
         validators={{
           emptyStringValidator: true,
         }}
