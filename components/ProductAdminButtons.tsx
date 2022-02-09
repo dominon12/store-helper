@@ -25,11 +25,11 @@ const ProductAdminButtons: FC<Props> = (props) => {
 
   if (userStore.isAuthenticated && userStore.user?.isAdmin) {
     const editAction = () => {
-      router.push(`/products/edit/${props.productId}`);
+      router.push(`/products/${props.productId}/edit`);
     };
 
     const deleteAction = () => {
-      router.push(`/products/delete/${props.productId}`);
+      router.push(`/products/${props.productId}/delete`);
     };
 
     return (
