@@ -1,4 +1,5 @@
 import { FILE_STORAGE_PASS, FILE_STORAGE_USER } from "./credentials-service";
+import Requester from "./Requester";
 import TokenStorage from "./TokenStorage";
 
 class ImageUploader {
@@ -11,17 +12,28 @@ class ImageUploader {
     // get auth token
     const authToken = await this.getAuthToken();
     // make request
-    const res = await fetch(this.apiUrl + "files/image/", {
-      method: "POST",
+    const res = await Requester.post<{ pk: number; image: string }>({
+      url: this.apiUrl + "files/image",
       body: formData,
-      headers: { Authorization: `Token ${authToken}` },
+      token: authToken,
+      dontSerialize: true,
     });
-    // throw an error in case something goes wrong with an api
-    if (!res.ok)
-      throw new Error("Image Uploader API didn't respond with OK code");
+    // throw an error in case something goes wrong with the api
+    if (res.error) throw new Error(res.error);
+    if (!res.data)
+      throw new Error("Image uploader API didn't respond with data");
     // return obtained image data
-    const { pk: id, image: src } = await res.json();
+    const { pk: id, image: src } = res.data;
     return { id, src };
+  }
+
+  public static async delete(imageId: number) {
+    const authToken = await this.getAuthToken();
+    const res = await Requester.delete(
+      this.apiUrl + "files/image/" + imageId + "/",
+      authToken
+    );
+    if (res.error) throw new Error(res.error);
   }
 
   private static async getAuthToken() {
