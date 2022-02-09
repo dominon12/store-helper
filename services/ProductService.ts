@@ -37,6 +37,7 @@ interface DeleteProductProps {
   productId: string;
   router: NextRouter;
   setIsLoading: Dispatch<SetStateAction<boolean>>;
+  setError: Dispatch<SetStateAction<string | null>>;
   authToken: string | null;
 }
 
@@ -133,19 +134,22 @@ class ProductService {
 
   static async delete(props: DeleteProductProps) {
     props.setIsLoading(true);
-
+    props.setError(null);
     await wait(500);
 
-    const res = await Requester.delete(
-      URLS.products + props.productId + "/",
-      props.authToken
-    );
+    try {
+      const res = await Requester.delete(
+        URLS.products + props.productId + "/",
+        props.authToken
+      );
 
-    if (res.error) throw new Error(res.error);
-
-    props.setIsLoading(false);
-
-    props.router.push("/products");
+      if (res.error) throw new Error(res.error);
+      else props.router.push("/products");
+    } catch (err) {
+      props.setError((err as Error).message);
+    } finally {
+      props.setIsLoading(false);
+    }
   }
 }
 

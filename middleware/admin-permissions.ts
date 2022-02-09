@@ -10,7 +10,7 @@ const adminPermissions =
       );
 
       if (typeof claims === "object") {
-        if (Date.now() > claims.exp!) {
+        if (Date.now() >= claims.exp! * 1000) {
           throw new Error(
             "Your session has expired. Please log out and log in again."
           );

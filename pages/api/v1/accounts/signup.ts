@@ -16,6 +16,7 @@ const apiRoute = nc<NextApiRequest, NextApiResponse>({
 
 apiRoute.post(async (req, res) => {
   req.body.password = await hash(req.body.password, 12);
+  req.body.isAdmin = false;
   const user = await User.create(req.body);
   res.status(201).json(user);
 });

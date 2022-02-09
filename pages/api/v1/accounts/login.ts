@@ -28,7 +28,7 @@ apiRoute.post(async (req, res) => {
     const jwt = sign(claims, process.env.JWT_SECRET!, {
       expiresIn: "1 day",
     });
-    res.json({ token: jwt });
+    res.json({ username: user.username, isAdmin: user.isAdmin, token: jwt });
   } else {
     res.status(401).json({
       error: "Authentication failed. Provided credentials are incorrect.",
