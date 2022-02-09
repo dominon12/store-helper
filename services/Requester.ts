@@ -155,7 +155,7 @@ class Requester {
   }): HeadersInit {
     let headers: HeadersInit = {};
 
-    if (props.token) headers["Authorization"] = `Token ${props.token}`;
+    if (props.token) headers["Authorization"] = props.token;
     if (props.contentType) headers["Content-Type"] = props.contentType;
 
     return headers;

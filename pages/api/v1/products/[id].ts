@@ -1,5 +1,6 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import nc from "next-connect";
+import adminPermissions from "../../../../middleware/admin-permissions";
 
 import Product from "../../../../models/Product";
 import dbConnect from "../../../../services/db/dbConnect";
@@ -18,16 +19,20 @@ apiRoute.get(async (req, res) => {
   res.status(200).json(product);
 });
 
-apiRoute.delete(async (req, res) => {
-  await Product.findByIdAndDelete(req.query.id);
-  res.status(204).end();
-});
+apiRoute.delete(
+  adminPermissions(async (req, res) => {
+    await Product.findByIdAndDelete(req.query.id);
+    res.status(204).end();
+  })
+);
 
-apiRoute.patch(async (req, res) => {
-  const product = await Product.findByIdAndUpdate(req.query.id, req.body, {
-    new: true,
-  });
-  res.status(201).json(product);
-});
+apiRoute.patch(
+  adminPermissions(async (req, res) => {
+    const product = await Product.findByIdAndUpdate(req.query.id, req.body, {
+      new: true,
+    });
+    res.status(201).json(product);
+  })
+);
 
 export default apiRoute;

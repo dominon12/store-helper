@@ -15,7 +15,7 @@ class ImageUploader {
     const res = await Requester.post<{ pk: number; image: string }>({
       url: this.apiUrl + "files/image",
       body: formData,
-      token: authToken,
+      token: `Token ${authToken}`,
       dontSerialize: true,
     });
     // throw an error in case something goes wrong with the api
@@ -31,7 +31,7 @@ class ImageUploader {
     const authToken = await this.getAuthToken();
     const res = await Requester.delete(
       this.apiUrl + "files/image/" + imageId + "/",
-      authToken
+      `Token ${authToken}`
     );
     if (res.error) throw new Error(res.error);
   }

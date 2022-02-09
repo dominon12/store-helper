@@ -3,6 +3,7 @@ import nc from "next-connect";
 
 import dbConnect from "../../../../services/db/dbConnect";
 import Product from "../../../../models/Product";
+import adminPermissions from "../../../../middleware/admin-permissions";
 
 dbConnect();
 
@@ -18,10 +19,12 @@ apiRoute.get(async (req, res) => {
   res.status(200).json(products);
 });
 
-apiRoute.post(async (req, res) => {
-  console.log({ body: req.body });
-  const product = await Product.create(req.body);
-  res.status(201).json(product);
-});
+apiRoute.post(
+  adminPermissions(async (req, res) => {
+    console.log({ body: req.body });
+    const product = await Product.create(req.body);
+    res.status(201).json(product);
+  })
+);
 
 export default apiRoute;

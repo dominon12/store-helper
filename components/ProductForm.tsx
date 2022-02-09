@@ -115,7 +115,7 @@ const ProductForm: FC<Props> = (props) => {
         image,
         setErrors,
         setIsLoading,
-        authToken: userStore.authToken,
+        authToken: userStore.user!.token,
         router,
       });
     } else {
@@ -124,7 +124,7 @@ const ProductForm: FC<Props> = (props) => {
         image,
         setErrors,
         setIsLoading,
-        authToken: userStore.authToken,
+        authToken: userStore.user!.token,
         router,
       });
     }
