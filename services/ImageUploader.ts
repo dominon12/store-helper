@@ -1,4 +1,3 @@
-import { FILE_STORAGE_PASS, FILE_STORAGE_USER } from "./credentials-service";
 import Requester from "./Requester";
 import TokenStorage from "./TokenStorage";
 
@@ -39,8 +38,8 @@ class ImageUploader {
   private static async getAuthToken() {
     const tokenStorage = new TokenStorage({
       credentials: {
-        username: FILE_STORAGE_USER,
-        password: FILE_STORAGE_PASS,
+        username: process.env.NEXT_PUBLIC_FILE_STORAGE_USER,
+        password: process.env.NEXT_PUBLIC_FILE_STORAGE_PASS,
       },
       storageKey: "imageUploaderAuthToken",
       authEndpoint: this.apiUrl + "accounts/token/",
