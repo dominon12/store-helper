@@ -44,7 +44,7 @@ class UserStore {
   }
 
   get isAuthenticated() {
-    return !!this._user;
+    return this.user && Date.now() < this.user.expiresIn * 1000;
   }
 
   private _initializeStore() {

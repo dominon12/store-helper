@@ -24,11 +24,15 @@ apiRoute.post(async (req, res) => {
   );
 
   if (passwordHashesAreEqual) {
-    const claims = { isAdmin: user.isAdmin };
-    const jwt = sign(claims, process.env.JWT_SECRET!, {
-      expiresIn: "1 day",
+    const claims = { userId: user._id, isAdmin: user.isAdmin };
+    const expiresIn = Math.floor(Date.now() / 1000) + 60 * 60 * 24; // 1 day
+    const jwt = sign(claims, process.env.JWT_SECRET!, { expiresIn });
+    res.json({
+      username: user.username,
+      isAdmin: user.isAdmin,
+      token: jwt,
+      expiresIn,
     });
-    res.json({ username: user.username, isAdmin: user.isAdmin, token: jwt });
   } else {
     res.status(401).json({
       error: "Authentication failed. Provided credentials are incorrect.",
