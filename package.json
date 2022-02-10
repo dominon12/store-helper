@@ -1,5 +1,5 @@
 {
-  "name": "store-helper-frontend",
+  "name": "store-helper",
   "private": true,
   "scripts": {
     "dev": "next dev",
