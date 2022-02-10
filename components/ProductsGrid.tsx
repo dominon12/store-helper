@@ -1,9 +1,10 @@
 import { FC } from "react";
 import styled from "styled-components";
-import { Product } from "../types/api-types";
-import { RequestResult } from "../types/system-types";
+
 import ApiResponseTemplate from "./ApiResponseTemplate";
 import ProductCard from "./ProductCard";
+import { Product } from "../types/api-types";
+import { RequestResult } from "../services/Requester";
 
 const GridContainer = styled.section`
   display: grid;
@@ -26,7 +27,7 @@ const ProductsGrid: FC<Props> = ({ products }) => {
       render={() => (
         <GridContainer>
           {products.data?.map((product) => (
-            <ProductCard key={product.pk} product={product} />
+            <ProductCard key={product._id} product={product} />
           ))}
         </GridContainer>
       )}

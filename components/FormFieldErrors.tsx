@@ -4,6 +4,7 @@ import styled from "styled-components";
 import Paragraph from "./Paragraph";
 
 const FieldError = styled(Paragraph)`
+  max-width: 390px;
   color: var(--color-details);
 `;
 

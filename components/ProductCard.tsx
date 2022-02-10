@@ -36,13 +36,13 @@ interface Props {
 
 const ProductCard: FC<Props> = ({ product }) => {
   return (
-    <Link href={`/products/${product.pk}`} passHref>
+    <Link href={`/products/${product._id}`} passHref>
       <Card>
-        <ProductImage src={product.image} alt={product.name} />
+        <ProductImage src={product.image.src} alt={product.name} />
         <Name>
           <Label>{product.name}</Label>
         </Name>
-        <Paragraph>{product.price} €</Paragraph>
+        <Paragraph>{product.price.toFixed(2)} €</Paragraph>
       </Card>
     </Link>
   );

@@ -7,6 +7,7 @@ import Button from "./Button";
 import Title from "./Title";
 import ProductService from "../services/ProductService";
 import userStore from "../store/userStore";
+import ErrorData from "./ErrorData";
 
 const Wrapper = styled.section`
   height: 60vh;
@@ -31,12 +32,13 @@ const ButtonsWrapper = styled.div`
 `;
 
 interface Props {
-  productId?: number;
+  productId?: string;
 }
 
 const DeleteProductConfirmation: FC<Props> = (props) => {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   const handleCancellation = () => {
     router.push(`/products/${props.productId}`);
@@ -59,7 +61,8 @@ const DeleteProductConfirmation: FC<Props> = (props) => {
         productId: props.productId,
         router,
         setIsLoading,
-        authToken: userStore.authToken,
+        setError,
+        authToken: userStore.user!.token,
       });
     }
   };
@@ -69,6 +72,7 @@ const DeleteProductConfirmation: FC<Props> = (props) => {
       <Title centered>
         Estás seguro de que quieres eliminar este producto?
       </Title>
+      <ErrorData errorMessage={error} />
       <ButtonsWrapper>
         <Button onClick={handleCancellation}>No</Button>
         <Button onClick={handleConfirmation} loading={isLoading}>

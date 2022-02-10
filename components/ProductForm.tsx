@@ -115,7 +115,7 @@ const ProductForm: FC<Props> = (props) => {
         image,
         setErrors,
         setIsLoading,
-        authToken: userStore.authToken,
+        authToken: userStore.user!.token,
         router,
       });
     } else {
@@ -124,7 +124,7 @@ const ProductForm: FC<Props> = (props) => {
         image,
         setErrors,
         setIsLoading,
-        authToken: userStore.authToken,
+        authToken: userStore.user!.token,
         router,
       });
     }
@@ -132,7 +132,7 @@ const ProductForm: FC<Props> = (props) => {
 
   const imageSrc = () => {
     if (image) return URL.createObjectURL(image);
-    if (props.product) return props.product.image;
+    if (props.product) return props.product.image.src;
   };
 
   return (

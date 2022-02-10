@@ -1,8 +1,11 @@
-import { NextRouter, Router } from "next/router";
+import { NextRouter } from "next/router";
 import { Dispatch, SetStateAction } from "react";
-import { Product } from "../types/api-types";
-import { performGET, performRequestWithBody, URLS } from "./api-service";
+
+import { URLS } from "./api-service";
 import { wait } from "./helper-service";
+import ImageUploader from "./ImageUploader";
+import Requester from "./Requester";
+import { Product } from "../types/api-types";
 
 interface GetProductProps {
   productId: string;
@@ -31,9 +34,10 @@ interface EditProductProps {
 }
 
 interface DeleteProductProps {
-  productId: number;
+  productId: string;
   router: NextRouter;
   setIsLoading: Dispatch<SetStateAction<boolean>>;
+  setError: Dispatch<SetStateAction<string | null>>;
   authToken: string | null;
 }
 
@@ -45,14 +49,14 @@ class ProductService {
 
     await wait(500);
 
-    const res = await performGET(URLS.products + props.productId);
+    const res = await Requester.get({
+      url: URLS.products + props.productId,
+    });
 
     props.setIsLoading(false);
 
     if (res.error) {
-      props.setErrors([
-        "Producto con este número de referencia no existe o no se puede conectarse al servidor",
-      ]);
+      props.setErrors([res.error]);
     } else {
       props.router.push(`/products/${props.productId}`);
     }
@@ -67,28 +71,27 @@ class ProductService {
     }
 
     props.setIsLoading(true);
-
-    await wait(1000);
-
-    const productFormData = new FormData();
-    productFormData.append("name", props.formData.name);
-    productFormData.append("description", props.formData.description);
-    productFormData.append("price", props.formData.price);
-    productFormData.append("image", props.image);
+    await wait(500);
 
     try {
-      const res = await performRequestWithBody<Product>(
-        URLS.products,
-        productFormData,
-        {
-          token: props.authToken,
-        }
-      );
-
-      if (res.error || !res.data) throw new Error(res.error || "API Error");
-      else props.router.push(`/products/${res.data?.pk}`);
+      // upload an image
+      const imageProps = await ImageUploader.upload(props.image);
+      (props.formData as any).image = imageProps;
+      // make a request
+      const res = await Requester.post<Product>({
+        url: URLS.products,
+        body: props.formData,
+        token: props.authToken,
+      });
+      // throw new error in case of error
+      if (res.error) throw new Error(res.error);
+      // throw new error if no data was returned
+      if (!res.data)
+        throw new Error("No data was returned from tne Products API");
+      // navigate user to product's page
+      else props.router.push(`/products/${res.data._id}`);
     } catch (e) {
-      props.setErrors([(e as Error).toString()]);
+      props.setErrors([(e as Error).message]);
     } finally {
       props.setIsLoading(false);
     }
@@ -97,31 +100,33 @@ class ProductService {
   static async edit(props: EditProductProps) {
     props.setIsLoading(true);
 
-    await wait(1000);
-
-    const productFormData = new FormData();
-    if (props.formData.name !== props.product.name)
-      productFormData.append("name", props.formData.name);
-    if (props.formData.description !== props.product.description)
-      productFormData.append("description", props.formData.description);
-    if (props.formData.price !== props.product.price.toString())
-      productFormData.append("price", props.formData.price);
-    if (props.image) productFormData.append("image", props.image);
+    await wait(500);
 
     try {
-      const res = await performRequestWithBody<Product>(
-        URLS.products + props.product.pk + "/",
-        productFormData,
-        {
-          token: props.authToken,
-          method: "PATCH",
-        }
-      );
+      if (props.image) {
+        // delete old image
+        await ImageUploader.delete(props.product.image.id);
+        // upload new image
+        const newImageProps = await ImageUploader.upload(props.image);
+        // set new image's props to the form data
+        (props.formData as any).image = newImageProps;
+      }
+      // send request to update the product
+      const res = await Requester.update<Product>({
+        url: URLS.products + props.product._id,
+        body: props.formData,
+        token: props.authToken,
+      });
 
-      if (res.error || !res.data) throw new Error(res.error || "API Error");
-      else props.router.push(`/products/${res.data?.pk}`);
+      // throw new error in case of error
+      if (res.error) throw new Error(res.error);
+      // throw new error if no data was returned
+      if (!res.data)
+        throw new Error("No data was returned from the Products API");
+      // navigate user to product's page
+      else props.router.push(`/products/${res.data?._id}`);
     } catch (e) {
-      props.setErrors([(e as Error).toString()]);
+      props.setErrors([(e as Error).message]);
     } finally {
       props.setIsLoading(false);
     }
@@ -129,17 +134,22 @@ class ProductService {
 
   static async delete(props: DeleteProductProps) {
     props.setIsLoading(true);
+    props.setError(null);
+    await wait(500);
 
-    await wait(1000);
+    try {
+      const res = await Requester.delete(
+        URLS.products + props.productId + "/",
+        props.authToken
+      );
 
-    await fetch(URLS.products + props.productId + "/", {
-      method: "DELETE",
-      headers: { Authorization: `Token ${props.authToken}` },
-    });
-
-    props.setIsLoading(false);
-
-    props.router.push("/products");
+      if (res.error) throw new Error(res.error);
+      else props.router.push("/products");
+    } catch (err) {
+      props.setError((err as Error).message);
+    } finally {
+      props.setIsLoading(false);
+    }
   }
 }
 

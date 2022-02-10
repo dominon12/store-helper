@@ -1,14 +1,13 @@
 import { makeAutoObservable } from "mobx";
 
-import { performGET, performRequestWithBody, URLS } from "./../services/api-service";
+import { URLS } from "./../services/api-service";
 import { User } from "../types/api-types";
 import { wait } from "../services/helper-service";
+import Requester from "../services/Requester";
 
 class UserStore {
   private _user: User | null = null;
   private _userKey = "user";
-  private _authToken: string | null = null;
-  private _authTokenKey = "authToken";
   private _isLoading = false;
   private _errors: string[] = [];
 
@@ -20,12 +19,9 @@ class UserStore {
   async authenticate(username: string, password: string) {
     this._errors = [];
     this._isLoading = true;
-    await wait(1000);
+    await wait(500);
 
-    const tokenError = await this._fetchAuthToken(username, password);
-    if (tokenError) this._errors.push(tokenError);
-
-    const userDataError = await this._fetchUserData();
+    const userDataError = await this.fetchUserData(username, password);
     if (userDataError) this._errors.push(userDataError);
 
     this._isLoading = false;
@@ -33,15 +29,10 @@ class UserStore {
 
   logout() {
     this.user = null;
-    this.authToken = null;
   }
 
   get user() {
     return this._user;
-  }
-
-  get authToken() {
-    return this._authToken;
   }
 
   get isLoading() {
@@ -53,79 +44,58 @@ class UserStore {
   }
 
   get isAuthenticated() {
-    return !!(this._user && this._authToken);
+    return this.user && Date.now() < this.user.expiresIn * 1000;
   }
 
   private _initializeStore() {
     if (typeof window !== "undefined") {
-      const savedAuthToken = localStorage.getItem(this._authTokenKey);
+      // get saves token and user data from local storage
       const savedUser = localStorage.getItem(this._userKey);
 
-      if (savedAuthToken && savedUser) {
-        this._authToken = savedAuthToken;
+      if (savedUser) {
+        // save saved values to the store
+        // if they exists
         this._user = JSON.parse(savedUser);
       }
     }
   }
 
   private set user(userData: User | null) {
+    // save passed user data to the store
     this._user = userData;
 
     if (typeof window !== "undefined") {
+      // check if we're on the client side
       if (userData) {
+        // get saved user data from the local storage
         const savedUser = localStorage.getItem(this._userKey);
 
         if (JSON.stringify(savedUser) !== JSON.stringify(userData)) {
+          // if passed user data and saved user data are ont equal,
+          // save passed user data to the local storage
           localStorage.setItem(this._userKey, JSON.stringify(userData));
         }
       } else {
+        // if there was no user data, remove local storage's value
         localStorage.removeItem(this._userKey);
       }
     }
   }
 
-  private set authToken(token: string | null) {
-    this._authToken = token;
-
-    if (typeof window !== "undefined") {
-      if (token) {
-        const savedToken = localStorage.getItem(this._authTokenKey);
-
-        if (savedToken !== token) {
-          localStorage.setItem(this._authTokenKey, token);
-        }
-      } else {
-        localStorage.removeItem(this._authTokenKey);
-      }
-    }
-  }
-
-  private async _fetchAuthToken(username: string, password: string) {
-    const authTokenRes = await performRequestWithBody<{ token: string }>(
-      URLS.auth + "token/",
-      { username, password },
-      { contentType: "application/json", serialize: true }
-    );
-
-    if (authTokenRes.error || !authTokenRes.data) {
-      return authTokenRes.error || "Error fetching auth token";
-    } else {
-      const authTokenData = authTokenRes.data;
-      this.authToken = authTokenData.token;
-    }
-  }
-
-  private async _fetchUserData() {
-    const userDataRes = await performGET<{ is_superuser: boolean }>(
-      URLS.auth + "current/",
-      this.authToken
-    );
+  private async fetchUserData(username: string, password: string) {
+    // send request to get info about the current user
+    const userDataRes = await Requester.post<User>({
+      url: URLS.auth + "login/",
+      body: { username, password },
+    });
 
     if (userDataRes.error || !userDataRes.data) {
+      // if there was an error, return error message
       return userDataRes.error || "Error fetching user data";
     } else {
+      // if there were no errors, save user data to the store
       const userData = userDataRes.data;
-      this.user = { isAdmin: userData.is_superuser };
+      this.user = userData;
     }
   }
 }

@@ -3,9 +3,9 @@ import { NextPage } from "next";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
 
-import userStore from "../store/userStore";
+import userStore from "../../store/userStore";
 
-const Logout: NextPage = () => {
+const LogoutPage: NextPage = () => {
   const router = useRouter();
 
   useEffect(() => {
@@ -16,4 +16,4 @@ const Logout: NextPage = () => {
   return null;
 };
 
-export default observer(Logout);
+export default observer(LogoutPage);
