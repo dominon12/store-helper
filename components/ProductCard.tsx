@@ -42,7 +42,7 @@ const ProductCard: FC<Props> = ({ product }) => {
         <Name>
           <Label>{product.name}</Label>
         </Name>
-        <Paragraph>{product.price} €</Paragraph>
+        <Paragraph>{product.price.toFixed(2)} €</Paragraph>
       </Card>
     </Link>
   );

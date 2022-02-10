@@ -2,7 +2,7 @@ import Requester from "./Requester";
 import TokenStorage from "./TokenStorage";
 
 class ImageUploader {
-  private static apiUrl = "http://127.0.0.1:8000/api/v1/";
+  private static apiUrl = "https://sobolevmax.pythonanywhere.com/api/v1/";
 
   public static async upload(image: File) {
     // prepare form data

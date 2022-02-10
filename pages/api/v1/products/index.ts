@@ -16,7 +16,7 @@ const apiRoute = nc<NextApiRequest, NextApiResponse>({
 
 apiRoute.get(async (req, res) => {
   const products = await Product.find({});
-  res.status(200).json(products);
+  res.status(200).json(products.reverse());
 });
 
 apiRoute.post(
