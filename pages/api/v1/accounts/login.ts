@@ -18,6 +18,14 @@ const apiRoute = nc<NextApiRequest, NextApiResponse>({
 apiRoute.post(async (req, res) => {
   const user = await User.findOne({ username: req.body.username });
 
+  if (!user) {
+    res
+      .status(400)
+      .json({
+        error: "Authentication failed. Provided credentials are incorrect.",
+      });
+  }
+
   const passwordHashesAreEqual = await compare(
     req.body.password,
     user.password
@@ -34,7 +42,7 @@ apiRoute.post(async (req, res) => {
       expiresIn,
     });
   } else {
-    res.status(401).json({
+    res.status(400).json({
       error: "Authentication failed. Provided credentials are incorrect.",
     });
   }
