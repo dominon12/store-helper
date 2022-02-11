@@ -15,6 +15,11 @@ const apiRoute = nc<NextApiRequest, NextApiResponse>({
 });
 
 apiRoute.post(async (req, res) => {
+  if (!req.body.username || !req.body.password) {
+    res.status(400).json({
+      error: "Username and password body parameters are required",
+    });
+  }
   req.body.password = await hash(req.body.password, 12);
   req.body.isAdmin = false;
   const user = await User.create(req.body);

@@ -31,7 +31,7 @@ apiRoute.patch(
     const product = await Product.findByIdAndUpdate(req.query.id, req.body, {
       new: true,
     });
-    res.status(201).json(product);
+    res.status(202).json(product);
   })
 );
 
